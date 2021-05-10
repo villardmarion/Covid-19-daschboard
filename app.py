@@ -43,7 +43,7 @@ app.layout = html.Div([
             selected_rows =[0],
             style_cell = {"fontFamily":"Arial","size":10,"textAligh":"left"}
             )
-            ],className="Thirteen columns"),
+            ],className="Twelve columns"),
         # Download button
     html.Div([
         html.A(html.Button('Télécharger les données', id ='download-button'), id='download-link-who')
@@ -61,11 +61,45 @@ app.layout = html.Div([
     html.Div([
         html.Div([
             dcc.Graph(id='covid-world'),
-            ], className="Thirteen columns"
+            ], className="Twelve columns"
             ) 
             ],className="row")
     ], className="page")
-	
+
+# formatting the table
+dash_table.DataTable(
+    data=data.to_dict('rows'),
+    columns=[
+        {'name': i, 'id': i} for i in data.columns
+    ],
+    style_data_conditional=[
+        {
+            'if': {
+                'column_id': 'WHO Region',
+                'filter': 'WHO Region eq "Europe"'
+            },
+            'backgroundColor': '#3D9970',
+            'color': 'white',
+        },
+        {
+            'if': {
+                'column_id': 'Cases - newly reported in last 24 hours',
+                'filter': 'Cases - newly reported in last 24 hours > num(100)'
+            },
+            'backgroundColor': '#3D9970',
+            'color': 'orange',
+        },
+	    {
+            'if': {
+                'column_id': 'Deaths - newly reported in last 24 hours',
+                'filter': 'Deaths - newly reported in last 24 hours > num(100)'
+            },
+            'backgroundColor': '#3D9970',
+            'color': 'red',
+        }
+    ]
+)
+
 @app.callback(
 	Output('graph1','figure'),
 	[Input('dropdown1','value')])
