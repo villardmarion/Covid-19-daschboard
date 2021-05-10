@@ -10,25 +10,17 @@ import dash_core_components as dcc
 import dash_html_components as html
 import pandas as pd
 from dash.dependencies import Input, Output
-import dash_bio as dashbio
-#import warnings
-#from six import PY3
+import warnings
+
 
 app = dash.Dash("covid")
 
 def dataload():
     pd.read_csv('https://www.data.gouv.fr/fr/datasets/donnees-relatives-aux-personnes-vaccinees-contre-la-covid-19-1/', sep = ';',encoding='latin-1')
     
-#warnings.filterwarnings("ignore")
+warnings.filterwarnings("ignore")
 data =dataload()
 
-app.layout = html.Div([
-	dashbio.AlignmentChart(
-		id= 'my-alignment-viewer',
-		data=data
-		),
-		html.Div(id='alignment-viewer-output')
-])
     
 app.layout = html.Div([
 	html.H1('Covid19 Dashboard'),
