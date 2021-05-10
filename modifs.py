@@ -21,17 +21,15 @@ covid_monde_url = (
     "https://covid19.who.int/WHO-COVID-19-global-data.csv"
     )
 
-covid_monde = pd.read_csv(covid_monde_url, sep=";", parse_dates=True, index_col=2,encoding= 'utf-8')
-covid_monde.sort_index(inplace=True)
+covid_monde = pd.read_csv(covid_monde_url, sep=",", encoding= 'utf-8')
 
 covid_url = (
     "https://www.data.gouv.fr/fr/datasets/r/900da9b0-8987-4ba7-b117-7aea0e53f530"
 )
 
-df = pd.read_csv(covid_url, sep=";", parse_dates=True, index_col=2,encoding= 'utf-8')
-df.sort_index(inplace=True)
-
+df = pd.read_csv(covid_url, sep=",", encoding= 'utf-8')
 # warnings.filterwarnings("ignore")
+
 data = df
 
 app.layout = html.Div(children=[
