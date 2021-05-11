@@ -14,117 +14,95 @@ import dash_table
 
 #import warnings
 #from six import PY3
+external_stylesheets = ['https://codepen.io/chriddyp/pen/bWLwgP.css']
 
-app = dash.Dash("covid")
+app = dash.Dash(__name__, external_stylesheets=external_stylesheets)
+
+#app = dash.Dash("covid")
+
+covid_monde_url = (
+    "https://covid19.who.int/WHO-COVID-19-global-data.csv"
+    )
 
 def dataload():
-    pd.read_csv('C:/Users/Dell/Downloads/WHO COVID-19 global table data May 7th 2021 at 2.07.36 PM.csv', sep = ';',encoding='latin-1')
-    
+    pd.read_csv(covid_monde_url, sep=",", encoding= 'utf-8') 
+
+
 #warnings.filterwarnings("ignore")
 data =dataload()
+
 
 data_columns = ['Name',	'WHO Region' 'Cases - cumulative total','Cases - cumulative total per 100000 population','Cases - newly reported in last 7 days', 
 'Cases - newly reported in last 7 days per 100000 population',	'Cases - newly reported in last 24 hours','Deaths - cumulative total',	
 'Deaths - cumulative total per 100000 population','Deaths - newly reported in last 7 days','Deaths - newly reported in last 7 days per 100000 population',	
 'Deaths - newly reported in last 24 hours','Transmission Classification']
 
-        
-    
-app.layout = html.Div([
-	html.H1('Covid 19'),
-    html.Div([
-        dash_table.DataTable(
-            id= 'data-who',
-            columns=[{"names":i,"id":i,"deletable":True} for i in data_columns],
-            editable= True,
-            #n_fixed_columns=2,
-            style_table = {'maxWidth':'1500px'},
-            row_selectable= "multi",
-            selected_rows =[0],
-            style_cell = {"fontFamily":"Arial","size":10,"textAligh":"left"}
-            )
-            ],className="Twelve columns"),
-        # Download button
-    html.Div([
-        html.A(html.Button('Télécharger les données', id ='download-button'), id='download-link-who')
-    ]),
-    html.Div([
-        dcc.RadioItems(
-            options=[
-                {'label':'Condensed Data Table', 'value':'Condensé'},
-                {'label':'Complete Data Table', 'value':'Complet'},
-            ], value='Condensé',
-            labelStyle={'display':'inline-block', 'width':'20%', 'margin':'auto', 'marginTop':15, 'paddingLeft':15},
-            id='radio-button'
-            )]),
-    #Graphs
-    html.Div([
-        html.Div([
-            dcc.Graph(id='covid-world'),
-            ], className="Twelve columns"
-            ) 
-            ],className="row")
-    ], className="page")
+df= pd.DataFrame(data, columns =data_columns)
 
-# formatting the table
-dash_table.DataTable(
-    data=data.to_dict('rows'),
-    columns=[
-        {'name': i, 'id': i} for i in data.columns
-    ],
-    style_data_conditional=[
-        {
-            'if': {
-                'column_id': 'WHO Region',
-                'filter': 'WHO Region eq "Europe"'
-            },
-            'backgroundColor': '#3D9970',
-            'color': 'white',
-        },
-        {
-            'if': {
-                'column_id': 'Cases - newly reported in last 24 hours',
-                'filter': 'Cases - newly reported in last 24 hours > num(100)'
-            },
-            'backgroundColor': '#3D9970',
-            'color': 'orange',
-        },
-	    {
-            'if': {
-                'column_id': 'Deaths - newly reported in last 24 hours',
-                'filter': 'Deaths - newly reported in last 24 hours > num(100)'
-            },
-            'backgroundColor': '#3D9970',
-            'color': 'red',
-        }
-    ]
-)
-
-@app.callback(
-	Output('graph1','figure'),
-	[Input('dropdown1','value')])
-    
-@app.callback(Output('data-who', 'columns'),
-    [Input('radio-button', 'value')])
-
-@app.callback(Output('covid-world','figure'),
-    [Input('data-who','selected_rows')])
-
-    
-def update_columns(value):
-    if value=='Complet':
-        column_set=[{"name":i,"id":i,"deletable":True} for i in complete_columns]
-    elif value=='Condensé':
-        column_set=[{"name":i,"id":i,"deletable":True} for i in condensed_columns]
-    return column_set
-    
-def update_graph(new_dropdown_value):
-	return {
-		'data':[{
-			'x':[1,3,3],
-			'y':eval(new_dropdown_value)
-		}]
+# styling the tabs
+tabs_styles = {
+    'height': '44px'
 }
-	
-if __name__== '__main__':
-	app.run_server(debug=True)
+tab_style = {
+    'borderBottom': '1px solid #d6d6d6',
+    'padding': '6px',
+    'fontWeight': 'bold'
+}
+
+tab_selected_style = {
+    'borderTop': '1px solid #d6d6d6',
+    'borderBottom': '1px solid #d6d6d6',
+    'backgroundColor': '#1175ff',
+    'color': 'white',
+    'padding': '6px'
+}
+
+app.layout = html.Div([
+    html.H1('Covid 19 Dasboard'),
+    dcc.Tabs(id='tabs-world', value='world-data', children=[
+        dcc.Tab(label='Monde', value='world-data', style=tab_style, selected_style=tab_selected_style,children=[
+           dash_table.DataTable(
+               data=df.to_dict('records'),
+               columns=[{'id': c, 'name': c} for c in df.columns],
+               page_size=10
+               ) 
+        ]),
+        dcc.Tab(label='France', value='France-data', style=tab_style, selected_style=tab_selected_style,children=[
+            ]),
+        dcc.Tab(label='France réanimation', value='tab-1', style=tab_style, selected_style=tab_selected_style, children=[
+            ]),
+        dcc.Tab(label='France Décès', value='tab-2', style=tab_style, selected_style=tab_selected_style,children=[
+            ]),
+        dcc.Tab(label='France Vaccination', value='tab-3', style=tab_style, selected_style=tab_selected_style,children=[
+            ]),
+    ], style=tabs_styles),
+    html.Div(id='tabs-content-inline')
+])
+
+@app.callback(Output('tabs-content-inline', 'children'),
+              Input('tabs-world', 'value'))
+
+def render_content(tab):
+    if tab == 'world-data':
+        return html.Div([
+            html.H3('Données mondiales')
+        ])
+    elif tab == 'France-data':
+        return html.Div([
+            html.H3('Données de la France')
+        ])
+    elif tab == 'tab-1':
+        return html.Div([
+            html.H3('Données réanimation')
+        ])
+    elif tab == 'tab-2':
+        return html.Div([
+            html.H3('Données décès')
+        ])
+    elif tab == 'tab-3':
+        return html.Div([
+            html.H3('Données vaccination')
+        ])
+    
+if __name__ == '__main__':
+    app.run_server(debug=True)
