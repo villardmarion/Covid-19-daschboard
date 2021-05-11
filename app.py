@@ -11,14 +11,21 @@ import dash_html_components as html
 import pandas as pd
 from dash.dependencies import Input, Output
 import dash_table
+from datetime import datetime
 
 #import warnings
 #from six import PY3
 external_stylesheets = ['https://codepen.io/chriddyp/pen/bWLwgP.css']
 
 app = dash.Dash(__name__, external_stylesheets=external_stylesheets)
-
-#app = dash.Dash("covid")
+dash_colors = {
+    'background': '#f2ffff',
+    'text': '#101b32',
+    'grid': '#333333',
+    'red': '#BF0010',
+    'blue': '#809cd5',
+    'green': '#46c299'
+}
 
 covid_monde_url = ("https://covid19.who.int/WHO-COVID-19-global-data.csv")
 
@@ -38,7 +45,7 @@ data =dataload(covid_monde_url)
 data_columns = ['Date_reported','Country_code','Country','WHO_region','New_cases','Cumulative_cases','New_deaths','Cumulative_deaths']
 
 df= pd.DataFrame(data, columns =data_columns)
-
+df['date'] = pd.to_datetime(df['Date_reported'])
 #données france: vaccins
 data_fr = dataload(covid_url)
 
