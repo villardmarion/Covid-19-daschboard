@@ -31,11 +31,13 @@ def dataload():
 #warnings.filterwarnings("ignore")
 data =dataload()
 
+
 data_columns = ['Name',	'WHO Region' 'Cases - cumulative total','Cases - cumulative total per 100000 population','Cases - newly reported in last 7 days', 
 'Cases - newly reported in last 7 days per 100000 population',	'Cases - newly reported in last 24 hours','Deaths - cumulative total',	
 'Deaths - cumulative total per 100000 population','Deaths - newly reported in last 7 days','Deaths - newly reported in last 7 days per 100000 population',	
 'Deaths - newly reported in last 24 hours','Transmission Classification']
 
+df= pd.DataFrame(data, columns =data_columns)
 
 app.layout = html.Div([
     html.H1('Covid 19'),
@@ -43,9 +45,9 @@ app.layout = html.Div([
        html.Div([
            # formatting the table
            dash_table.DataTable(
-               data=data.to_dict('rows'),
+               data=df.to_dict('rows'),
                columns=[
-                   {'name': i, 'id': i} for i in data.columns
+                   {'name': i, 'id': i} for i in data_columns
                    ],
                style_data_conditional=[
                    {
@@ -75,9 +77,9 @@ app.layout = html.Div([
             ]),
             dash_table.DataTable(
                 id= 'data-who',
-                columns=[{"names":i,"id":i,"deletable":True} for i in data_columns],
+                columns=[{"name":i,"id":i,"deletable":True} for i in data_columns],
                 editable= True,
-                #n_fixed_columns=2,
+                fixed_columns=2,
                 style_table = {'maxWidth':'1500px'},
                 row_selectable= "multi",
                 selected_rows =[0],
