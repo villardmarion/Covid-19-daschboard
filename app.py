@@ -20,24 +20,31 @@ app = dash.Dash(__name__, external_stylesheets=external_stylesheets)
 
 #app = dash.Dash("covid")
 
-covid_monde_url = (
-    "https://covid19.who.int/WHO-COVID-19-global-data.csv"
-    )
+covid_monde_url = ("https://covid19.who.int/WHO-COVID-19-global-data.csv")
 
-def dataload():
-    pd.read_csv(covid_monde_url, sep=",", encoding= 'utf-8') 
+
+covid_url = (
+    "https://www.data.gouv.fr/fr/datasets/r/900da9b0-8987-4ba7-b117-7aea0e53f530"
+)
+def dataload(data):
+    pd.read_csv(data, sep=",") 
 
 
 #warnings.filterwarnings("ignore")
-data =dataload()
 
+#données OMS
+data =dataload(covid_monde_url)
 
-data_columns = ['Name',	'WHO Region' 'Cases - cumulative total','Cases - cumulative total per 100000 population','Cases - newly reported in last 7 days', 
-'Cases - newly reported in last 7 days per 100000 population',	'Cases - newly reported in last 24 hours','Deaths - cumulative total',	
-'Deaths - cumulative total per 100000 population','Deaths - newly reported in last 7 days','Deaths - newly reported in last 7 days per 100000 population',	
-'Deaths - newly reported in last 24 hours','Transmission Classification']
+data_columns = ['Date_reported','Country_code','Country','WHO_region','New_cases','Cumulative_cases','New_deaths','Cumulative_deaths']
 
 df= pd.DataFrame(data, columns =data_columns)
+
+#données france: vaccins
+data_fr = dataload(covid_url)
+
+data_fr_columns = ['reg', 'vaccin','jour','n_dose1','n_dose2','n_cum_dose1','n_cum_dose2']
+
+df_fr= pd.DataFrame(data_fr, columns =data_fr_columns)
 
 # styling the tabs
 tabs_styles = {
@@ -58,24 +65,51 @@ tab_selected_style = {
 }
 
 app.layout = html.Div([
-    html.H1('Covid 19 Dasboard'),
-    dcc.Tabs(id='tabs-world', value='world-data', children=[
+    html.H1('Covid-19 Dasboard'),
+    dcc.Tabs(id='tabs-world', value='world-data', children=[ 
         dcc.Tab(label='Monde', value='world-data', style=tab_style, selected_style=tab_selected_style,children=[
-           dash_table.DataTable(
+           dash_table.DataTable(# voir pourquoi les données ne s'affichent pas
                data=df.to_dict('records'),
+               sort_action='native',
+               sort_mode="multi",
+               column_selectable="single",
+               row_selectable="multi",
                columns=[{'id': c, 'name': c} for c in df.columns],
-               page_size=10
-               ) 
+               fixed_rows={'headers': True, 'data': 1},
+               selected_columns=[],
+               selected_rows=[],
+               page_action="native",
+               page_current= 0,
+               page_size=10,
+               css=[{
+                   'selector': '.dash-spreadsheet td div',
+                   'rule': '''
+                   line-height: 15px;
+                   max-height: 30px; min-height: 30px; height: 30px;
+                   display: block;
+                   overflow-y: hidden;
+                   '''
+            }],
+              tooltip_data=[
+                {
+                column: {'value': str(value), 'type': 'markdown'}
+                for column, value in row.items()
+            }   for row in df.to_dict('records')
+            ],
+            tooltip_duration=None,
+
+            style_cell={'textAlign': 'left'}
+    ),  
         ]),
         dcc.Tab(label='France', value='France-data', style=tab_style, selected_style=tab_selected_style,children=[
             ]),
-        dcc.Tab(label='France réanimation', value='tab-1', style=tab_style, selected_style=tab_selected_style, children=[
+        dcc.Tab(label='France Réanimation', value='tab-1', style=tab_style, selected_style=tab_selected_style, children=[
             ]),
         dcc.Tab(label='France Décès', value='tab-2', style=tab_style, selected_style=tab_selected_style,children=[
             ]),
         dcc.Tab(label='France Vaccination', value='tab-3', style=tab_style, selected_style=tab_selected_style,children=[
-            ]),
-    ], style=tabs_styles),
+                    ]),
+        ], style=tabs_styles),
     html.Div(id='tabs-content-inline')
 ])
 
