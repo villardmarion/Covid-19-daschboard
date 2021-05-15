@@ -859,8 +859,9 @@ style_dataconditional=[
                         }
             ]
 
+##############################################APP Layout##################################################################
 app.layout = html.Div([
-    html.H1(children='Covid-19 Dasboard',
+    html.H1(children='Covid-19 Dashboard',
         style={
             'textAlign': 'center',
             'color': '#101b32'
