@@ -33,3 +33,12 @@ Pour la situation vaccinale et toujours provenant de la même source une autre b
 #### France Réanimation
 #### France Décès
 #### France Vaccination
+
+# Modélisation SIR:
+#Source de ce jeu de données : https://coronavirus.politologue.com - Les données proposées dans ce fichier sont une compilation des données proposées par le CSSE (The Johns Hopkins University) https://gisanddata.maps.arcgis.com/apps/opsdashboard/index.html#/bda7594740fd40299423467b48e9ecf6
+#Les données de ce fichier sont celles qui sont produites pour générer les graphiques sur https: //coronavirus.politologue.com
+#Vous pouvez utiliser ces données sans problème et une référence à https://coronavirus.politologue.com sera appréciable
+-----------------------------------------------
+#Certains ne respectent pas la demande de ne pas récupérer trop souvent le fichier pour préserver le serveur (cela ne sert à rien de récupérer toutes les 3 min), le fichier présente désormais les 30 derniers jours seulement
+![image](https://user-images.githubusercontent.com/56644232/118364694-d1d5b700-b599-11eb-91ae-fa040eabacb6.png)
+
