@@ -682,14 +682,15 @@ card_graph_reg1 = html.Div(
     ]
 )
 
+
 # Monde visualisations:
 ## New cases graphique:
-
+monde_cases_time = df_monde[['Date_reported','New_cases']].groupby('Date_reported', as_index=False).sum()
 def update_graph_monde(title):
-    fig_time = px.line(df_monde, x=df_monde['Date_reported'], y=df_monde['New_cases'], color=df_monde['WHO_region'], title=title)
+    fig_time = px.line(monde_cases_time, x=monde_cases_time['Date_reported'], y=monde_cases_time['New_cases'], title=title)
     fig_time.update_xaxes(rangeslider_visible=True)
     return fig_time
-
+    
 card_graph_world_time = dbc.Card(
     dcc.Graph(id='my-graph-world_time', figure=update_graph_monde("Evolution du nombre de nouvaux cas dans le monde")), body=True, color ='#f2ffff',
     )
@@ -703,15 +704,34 @@ card_graph_world1 = html.Div(
         ),
     ]
 )
-
+     
+     
+monde_cases = df_monde[['New_cases','WHO_region']].groupby('WHO_region', as_index=False).sum()
+def update_graph_monde3(title):
+    fig_time = px.bar(monde_cases, x=monde_cases['WHO_region'], y=monde_cases['New_cases'], color=monde_cases['WHO_region'], title=title)
+    return fig_time
+    
+card_graph_world_time3 = dbc.Card(
+    dcc.Graph(id='my-graph-world_time3', figure=update_graph_monde3("Nombre total de cas par région dans le monde")), body=True, color ='#f2ffff',
+    )
+card_graph_world3 = html.Div(
+    [
+        dbc.Row(
+            [
+                dbc.Col(card_graph_world_time3),
+            ],
+            className='mb-6',
+        ),
+    ]
+)
 ## New deaths graphics:
-
-
+      
+monde_deaths_time = df_monde[['Date_reported','New_deaths']].groupby('Date_reported', as_index=False).sum()
 def update_graph_monde2(title):
-    fig_time = px.line(df_monde, x=df_monde['Date_reported'], y=df_monde['New_deaths'], color=df_monde['WHO_region'], title=title)
+    fig_time = px.line(monde_deaths_time, x=monde_deaths_time['Date_reported'], y=monde_deaths_time['New_deaths'], title=title)
     fig_time.update_xaxes(rangeslider_visible=True)
     return fig_time
-
+    
 card_graph_world_time2 = dbc.Card(
     dcc.Graph(id='my-graph-world_time2', figure=update_graph_monde2("Evolution du nombre de décès dans le monde")), body=True, color ='#f2ffff',
     )
@@ -725,13 +745,33 @@ card_graph_world2 = html.Div(
         ),
     ]
 )
+   
 
-# vaccination dans le monde:
-
-def update_graph_monde4(title):
-    fig_time = px.area(df_monde_vacc, x='DATE_UPDATED', y='TOTAL_VACCINATIONS',facet_col="WHO_REGION", color='WHO_REGION',facet_col_wrap=2, title=title)
+monde_deaths = df_monde[['New_deaths','WHO_region']].groupby('WHO_region', as_index=False).sum()
+def update_graph_monde5(title):
+    fig_time = px.bar(monde_deaths, x=monde_deaths['WHO_region'], y=monde_deaths['New_deaths'], color=monde_deaths['WHO_region'], title=title)
     return fig_time
-
+    
+card_graph_world_time5 = dbc.Card(
+    dcc.Graph(id='my-graph-world_time5', figure=update_graph_monde5("Nombre total de décès par région dans le monde")), body=True, color ='#f2ffff',
+    )
+card_graph_world5 = html.Div(
+    [
+        dbc.Row(
+            [
+                dbc.Col(card_graph_world_time5),
+            ],
+            className='mb-6',
+        ),
+    ]
+)
+  
+# vaccination dans le monde:
+        
+def update_graph_monde4(title):
+    fig_time = px.bar(df_monde_vacc, x='COUNTRY', y='TOTAL_VACCINATIONS', color='WHO_REGION', title=title)
+    return fig_time
+    
 card_graph_world_time4 = dbc.Card(
     dcc.Graph(id='my-graph-world_time4', figure=update_graph_monde4("Population vaccinée dans le monde")), body=True, color ='#f2ffff',
     )
@@ -746,6 +786,7 @@ card_graph_world4 = html.Div(
         ),
     ]
 )      
+
 
 # conditions on the world data table:      
 style_dataconditional=[
@@ -850,7 +891,21 @@ app.layout = html.Div([
             dbc.Row([
                 dbc.Col(html.Div([
                 html.Br(),
+                card_graph_world3,
+                html.Br(),
+                html.Br()])),
+                ],style={"margin":"auto"}),
+            dbc.Row([
+                dbc.Col(html.Div([
+                html.Br(),
                 card_graph_world2,
+                html.Br(),
+                html.Br()])),
+                ],style={"margin":"auto"}),
+            dbc.Row([
+                dbc.Col(html.Div([
+                html.Br(),
+                card_graph_world5,
                 html.Br(),
                 html.Br()])),
                 ],style={"margin":"auto"}),
@@ -877,7 +932,6 @@ app.layout = html.Div([
                sort_mode="multi",
                column_selectable="single",
                row_selectable="multi",
-              # columns=[{'id': c, 'name': c} for c in df_monde.columns],
                style_data_conditional= style_dataconditional,
                fixed_rows={'headers': True, 'data': 1},
                filter_action='native',
