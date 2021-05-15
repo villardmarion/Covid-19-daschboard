@@ -76,19 +76,19 @@ covid_france_vaccination_url = (
 covid_france_vaccination = pd.read_csv(covid_france_vaccination_url, sep=";")
 covid_france_vaccination['date'] = pd.to_datetime(covid_france_vaccination['jour'])
 
-##Données des graphiques des décès	
-# Graphique en fonction du temps, du sexe et du département	
-covid_france_dc_tps_sexe_url = (	
-        "https://www.data.gouv.fr/fr/datasets/r/63352e38-d353-4b54-bfd1-f1b3ee1cabd7"	
-        )	
-covid_france_dc_tps_sexe = pd.read_csv(covid_france_dc_tps_sexe_url, sep=";")	
-covid_france_dc_tps_sexe['date']=pd.to_datetime(covid_france_dc_tps_sexe['jour'])	
+##Données des graphiques des décès  
+# Graphique en fonction du temps, du sexe et du département 
+covid_france_dc_tps_sexe_url = (    
+        "https://www.data.gouv.fr/fr/datasets/r/63352e38-d353-4b54-bfd1-f1b3ee1cabd7"   
+        )   
+covid_france_dc_tps_sexe = pd.read_csv(covid_france_dc_tps_sexe_url, sep=";")   
+covid_france_dc_tps_sexe['date']=pd.to_datetime(covid_france_dc_tps_sexe['jour'])   
 
-# Graphique en fonction de la classe d'âge et de la région	
-covid_france_dc_age_url = (	
-        "https://www.data.gouv.fr/fr/datasets/r/08c18e08-6780-452d-9b8c-ae244ad529b3"	
-        )	
-covid_france_dc_age = pd.read_csv(covid_france_dc_age_url, sep=";")	
+# Graphique en fonction de la classe d'âge et de la région  
+covid_france_dc_age_url = ( 
+        "https://www.data.gouv.fr/fr/datasets/r/08c18e08-6780-452d-9b8c-ae244ad529b3"   
+        )   
+covid_france_dc_age = pd.read_csv(covid_france_dc_age_url, sep=";") 
 covid_france_dc_age['date']=pd.to_datetime(covid_france_dc_age['jour'])
 
 #Graph en fonction de la classe d'âge
@@ -433,8 +433,8 @@ card_graph_world4 = html.Div(
 ## Graphiques réanimations
 
 # Graphique réanimation en fonction du temps
-covid_france_dc_tot = covid_france_rea_tps_sexe[covid_france_rea_tps_sexe.sexe == 0]	
-dernier_jour_rea_age = max(covid_france_rea_tps_sexe["date"])	
+covid_france_dc_tot = covid_france_rea_tps_sexe[covid_france_rea_tps_sexe.sexe == 0]    
+dernier_jour_rea_age = max(covid_france_rea_tps_sexe["date"])   
 covid_france_dernier_jour_rea = covid_france_rea_tps_sexe[covid_france_rea_tps_sexe.date == dernier_jour_rea_age]
 evol_rea = covid_france_rea_tps_sexe[['date','rea']].groupby('date', as_index=False).sum()
 
@@ -474,7 +474,7 @@ card_graph_rea_age = dbc.Card(
 
 # Graphique réanimation en fonction du sexe
 dernier_jour_rea = max(covid_france_rea_age["date"])
-covid_france_dernier_jour_age_rea = covid_france_rea_age[covid_france_rea_age.date == dernier_jour_rea]	
+covid_france_dernier_jour_age_rea = covid_france_rea_age[covid_france_rea_age.date == dernier_jour_rea] 
 
 age_rea = covid_france_dernier_jour_age_rea[['cl_age90','rea']].groupby('cl_age90', as_index=False).sum()
 sexe_rea = covid_france_rea_tps_sexe[['sexe','rea']].groupby('sexe', as_index=False).sum()
@@ -556,125 +556,125 @@ card_graph_rea_dep1 = html.Div(
     ]
 )
 
-## Graphique des décès 	
-# Graphique des décès en fonction du temps	
-covid_france_dc_tot = covid_france_dc_tps_sexe[covid_france_dc_tps_sexe.sexe == 0]	
-dernier_jour_dc1 = max(covid_france_dc_tps_sexe["date"])	
-covid_france_dernier_jour_dc1 = covid_france_dc_tps_sexe[covid_france_dc_tps_sexe.date == dernier_jour_dc1]	
+## Graphique des décès  
+# Graphique des décès en fonction du temps  
+covid_france_dc_tot = covid_france_dc_tps_sexe[covid_france_dc_tps_sexe.sexe == 0]  
+dernier_jour_dc1 = max(covid_france_dc_tps_sexe["date"])    
+covid_france_dernier_jour_dc1 = covid_france_dc_tps_sexe[covid_france_dc_tps_sexe.date == dernier_jour_dc1] 
 
-evol_dc = covid_france_dc_tot[['date','dc']].groupby('date', as_index=False).sum()	
-def update_graph_dc_tps(title):	
-    fig_tps_dc = px.line(evol_dc, x=evol_dc['date'], y=evol_dc['dc'], title=title, labels={"date":"Date","dc":"Nombre de décès"})	
+evol_dc = covid_france_dc_tot[['date','dc']].groupby('date', as_index=False).sum()  
+def update_graph_dc_tps(title): 
+    fig_tps_dc = px.line(evol_dc, x=evol_dc['date'], y=evol_dc['dc'], title=title, labels={"date":"Date","dc":"Nombre de décès"})   
 
-    return fig_tps_dc	
+    return fig_tps_dc   
 
-card_graph_dc_tps = dbc.Card(	
-    dcc.Graph(id='my-graph-dc-tps', figure=update_graph_dc_tps("Evolution du nombre total de décès")), body=True, color ='#EC7063',	
-    )	
-card_graph_dc_tps1 = html.Div(	
-    [	
-        dbc.Row(	
-            [	
-                dbc.Col(card_graph_dc_tps),	
-            ],	
-            className='mb-6',	
-        ),	
-    ]	
-)	
+card_graph_dc_tps = dbc.Card(   
+    dcc.Graph(id='my-graph-dc-tps', figure=update_graph_dc_tps("Evolution du nombre total de décès")), body=True, color ='#EC7063', 
+    )   
+card_graph_dc_tps1 = html.Div(  
+    [   
+        dbc.Row(    
+            [   
+                dbc.Col(card_graph_dc_tps), 
+            ],  
+            className='mb-6',   
+        ),  
+    ]   
+)   
 
-# Graphique des décès en fonction de la classe d'âge	
-dernier_jour_dc = max(covid_france_dc_age["date"])	
-covid_france_dernier_jour_dc = covid_france_dc_age[covid_france_dc_age.date == dernier_jour_dc]	
+# Graphique des décès en fonction de la classe d'âge    
+dernier_jour_dc = max(covid_france_dc_age["date"])  
+covid_france_dernier_jour_dc = covid_france_dc_age[covid_france_dc_age.date == dernier_jour_dc] 
 
-age_dc = covid_france_dernier_jour_dc[['cl_age90','dc']].groupby('cl_age90', as_index=False).sum()	
-age_dc['cl_age90'] = age_dc['cl_age90'].astype(str)	
-age_dc['cl_age90_str'] = ["Toutes","9-19","19-29","29-39","39-49","49-59","59-69","69-79","79-89","89-90","+ de 90"]	
+age_dc = covid_france_dernier_jour_dc[['cl_age90','dc']].groupby('cl_age90', as_index=False).sum()  
+age_dc['cl_age90'] = age_dc['cl_age90'].astype(str) 
+age_dc['cl_age90_str'] = ["Toutes","9-19","19-29","29-39","39-49","49-59","59-69","69-79","79-89","89-90","+ de 90"]    
 
-def update_graph_dc_age(title):	
-    fig_age_dc = px.bar(age_dc, x=age_dc['cl_age90_str'], y=age_dc['dc'], title=title, text=age_dc['dc'], labels={"cl_age90_str":"Classe d'âge","dc":"Nombre de décès"})	
-    fig_age_dc.update_traces(textposition='outside')	
-    return fig_age_dc	
+def update_graph_dc_age(title): 
+    fig_age_dc = px.bar(age_dc, x=age_dc['cl_age90_str'], y=age_dc['dc'], title=title, text=age_dc['dc'], labels={"cl_age90_str":"Classe d'âge","dc":"Nombre de décès"})    
+    fig_age_dc.update_traces(textposition='outside')    
+    return fig_age_dc   
 
-card_graph_dc_age = dbc.Card(	
-    dcc.Graph(id='my-graph-dc-age', figure=update_graph_dc_age("Nombre total de décès en fonction de la classe d'âge")), body=True, color ='#E74C3C',	
-    )	
+card_graph_dc_age = dbc.Card(   
+    dcc.Graph(id='my-graph-dc-age', figure=update_graph_dc_age("Nombre total de décès en fonction de la classe d'âge")), body=True, color ='#E74C3C',   
+    )   
 
-# Graphique des décès en fonction du sexe	
-sexe_dc = covid_france_dernier_jour_dc1[['sexe','dc']].groupby('sexe', as_index=False).sum()	
-sexe_dc['sexe_str'] = ["Les deux","Hommes","Femmes"]	
+# Graphique des décès en fonction du sexe   
+sexe_dc = covid_france_dernier_jour_dc1[['sexe','dc']].groupby('sexe', as_index=False).sum()    
+sexe_dc['sexe_str'] = ["Les deux","Hommes","Femmes"]    
 
-def update_graph_dc_sexe(title):	
-    fig_dc_sexe = px.bar(sexe_dc, x=sexe_dc['sexe_str'], y=sexe_dc['dc'], title=title, text=sexe_dc['dc'], labels={"sexe_str":"Sexe","dc":"Nombre de décès"})	
-    fig_dc_sexe.update_traces(textposition='outside')	
-    return fig_dc_sexe	
+def update_graph_dc_sexe(title):    
+    fig_dc_sexe = px.bar(sexe_dc, x=sexe_dc['sexe_str'], y=sexe_dc['dc'], title=title, text=sexe_dc['dc'], labels={"sexe_str":"Sexe","dc":"Nombre de décès"})   
+    fig_dc_sexe.update_traces(textposition='outside')   
+    return fig_dc_sexe  
 
-card_graph_dc_sexe = dbc.Card(	
+card_graph_dc_sexe = dbc.Card(  
     dcc.Graph(id='my-graph-dc-sexe', figure=update_graph_dc_sexe("Nombre total de décès en fonction du sexe")), body=True, color ='#E74C3C',
     )
-card_graph_dc_sexe1 = html.Div(	
-    [	
-        dbc.Row(	
-            [	
-                dbc.Col(card_graph_dc_sexe),	
-                dbc.Col(card_graph_dc_age)	
-            ],	
-            className='mb-6',	
-        ),	
-    ]	
-)	
+card_graph_dc_sexe1 = html.Div( 
+    [   
+        dbc.Row(    
+            [   
+                dbc.Col(card_graph_dc_sexe),    
+                dbc.Col(card_graph_dc_age)  
+            ],  
+            className='mb-6',   
+        ),  
+    ]   
+)   
 
-# Graphique des décès en fonction de la région	
-reg_dc = covid_france_dernier_jour_dc[['reg','dc']].groupby('reg', as_index=False).sum()	
-reg_dc['reg_str']= ["Guadeloupe","Martinique","Guyane","Reunion","Mayotte","Île-de-France",	
-"Centre-Val de Loire","Bourgogne","Normandie","Hauts-de-France","Grand-Est","Pays de la Loire",	
-"Bretagne","Nouvelle Aquitaine","Occitanie","Auvergne","PACA","Corse"]	
+# Graphique des décès en fonction de la région  
+reg_dc = covid_france_dernier_jour_dc[['reg','dc']].groupby('reg', as_index=False).sum()    
+reg_dc['reg_str']= ["Guadeloupe","Martinique","Guyane","Reunion","Mayotte","Île-de-France", 
+"Centre-Val de Loire","Bourgogne","Normandie","Hauts-de-France","Grand-Est","Pays de la Loire", 
+"Bretagne","Nouvelle Aquitaine","Occitanie","Auvergne","PACA","Corse"]  
 
-def update_graph_dc_reg(title):	
-    fig_dc_reg = px.bar(reg_dc, x=reg_dc['reg_str'], y=reg_dc['dc'], title=title, text=reg_dc['dc'],labels={"reg_str":"Régions","dc":"Nombre de décès"})	
-    fig_dc_reg.update_traces(textposition='outside')	
-    return fig_dc_reg	
+def update_graph_dc_reg(title): 
+    fig_dc_reg = px.bar(reg_dc, x=reg_dc['reg_str'], y=reg_dc['dc'], title=title, text=reg_dc['dc'],labels={"reg_str":"Régions","dc":"Nombre de décès"})    
+    fig_dc_reg.update_traces(textposition='outside')    
+    return fig_dc_reg   
 
-card_graph_dc_reg = dbc.Card(	
-    dcc.Graph(id='my-graph-dc-reg', figure=update_graph_dc_reg("Nombre total de décès en fonction de la région")), body=True, color ='#CB4335',	
-    )	
-card_graph_dc_reg1 = html.Div(	
-    [	
-        dbc.Row(	
-            [	
-                dbc.Col(card_graph_dc_reg),	
-            ],	
-            className='mb-6',	
-        ),	
-    ]	
-)	
+card_graph_dc_reg = dbc.Card(   
+    dcc.Graph(id='my-graph-dc-reg', figure=update_graph_dc_reg("Nombre total de décès en fonction de la région")), body=True, color ='#CB4335', 
+    )   
+card_graph_dc_reg1 = html.Div(  
+    [   
+        dbc.Row(    
+            [   
+                dbc.Col(card_graph_dc_reg), 
+            ],  
+            className='mb-6',   
+        ),  
+    ]   
+)   
 
-# Graphique des décès en fonction du département	
-dep_dc = covid_france_dernier_jour_dc1[['dep','dc']].groupby('dep', as_index=False).sum()	
-dep_dc_new = dep_dc.drop(dep_dc.index[96:101])	
-dep_dc_new['dep_str'] = ["01","02","03","04","05","06","07","08","09","10","11","12","13",	
-"14","15","16","17","18","19","21","22","23","24","25","26","27","28","29","2A","2B","30","31",	
-"32","33","34","35","36","37","38","39","40","41","42","43","44","45","46","47","48","49",	
-"50","51","52","53","54","55","56","57","58","59","60","61","62","63","64","65","66","67",	
-"68","69","70","71","72","73","74","75","76","77","78","79","80","81","82","83","84","85",	
-"86","87","88","89","90","91","92","93","94","95"]	
+# Graphique des décès en fonction du département    
+dep_dc = covid_france_dernier_jour_dc1[['dep','dc']].groupby('dep', as_index=False).sum()   
+dep_dc_new = dep_dc.drop(dep_dc.index[96:101])  
+dep_dc_new['dep_str'] = ["01","02","03","04","05","06","07","08","09","10","11","12","13",  
+"14","15","16","17","18","19","21","22","23","24","25","26","27","28","29","2A","2B","30","31", 
+"32","33","34","35","36","37","38","39","40","41","42","43","44","45","46","47","48","49",  
+"50","51","52","53","54","55","56","57","58","59","60","61","62","63","64","65","66","67",  
+"68","69","70","71","72","73","74","75","76","77","78","79","80","81","82","83","84","85",  
+"86","87","88","89","90","91","92","93","94","95"]  
 
-def update_graph_dc_dep(title):	
-    fig_dep_dc = px.bar(dep_dc_new, x=dep_dc_new['dep_str'], y=dep_dc_new['dc'], title=title, text=dep_dc_new['dc'],labels={"dep_str":"Départements","dc":"Nombre de décès"})	
-    fig_dep_dc.update_traces(textposition='outside')	
-    return fig_dep_dc	
+def update_graph_dc_dep(title): 
+    fig_dep_dc = px.bar(dep_dc_new, x=dep_dc_new['dep_str'], y=dep_dc_new['dc'], title=title, text=dep_dc_new['dc'],labels={"dep_str":"Départements","dc":"Nombre de décès"})   
+    fig_dep_dc.update_traces(textposition='outside')    
+    return fig_dep_dc   
 
-card_graph_dc_dep = dbc.Card(	
-    dcc.Graph(id='my-graph-dc-dep', figure=update_graph_dc_dep("Nombre total de décès en fonction du département")), body=True, color ='#B03A2E',	
-    )	
-card_graph_dc_dep1 = html.Div(	
-    [	
-        dbc.Row(	
-            [	
-                dbc.Col(card_graph_dc_dep),	
-            ],	
-            className='mb-6',	
-        ),	
-    ]	
+card_graph_dc_dep = dbc.Card(   
+    dcc.Graph(id='my-graph-dc-dep', figure=update_graph_dc_dep("Nombre total de décès en fonction du département")), body=True, color ='#B03A2E',   
+    )   
+card_graph_dc_dep1 = html.Div(  
+    [   
+        dbc.Row(    
+            [   
+                dbc.Col(card_graph_dc_dep), 
+            ],  
+            className='mb-6',   
+        ),  
+    ]   
 )
 
 
@@ -1018,87 +1018,87 @@ app.layout = html.Div([
                 html.Br(),
                 html.Br()])),
                 ],style={"margin":"auto"}),
-             dbc.Row(dbc.Card(html.Div([	
-                dcc.Checklist(	
-                    id="checklist",	
-                    value=all_dep[3:],	
-                    labelStyle={'display': 'inline-block'}	
-                ),	
-                dcc.Graph(id="line-chart"),	
-            ]), body=True, color="#C39BD3")),	
+             dbc.Row(dbc.Card(html.Div([    
+                dcc.Checklist(  
+                    id="checklist", 
+                    value=all_dep[3:],  
+                    labelStyle={'display': 'inline-block'}  
+                ),  
+                dcc.Graph(id="line-chart"), 
+            ]), body=True, color="#C39BD3")),   
 
-             dbc.Row(dbc.Card(html.Div([	
-                dcc.Checklist(	
-                    id="checklist1",	
-                    value=all_dep[3:],	
-                    labelStyle={'display': 'inline-block'}	
-                ),	
-                dcc.Graph(id="line-chart1"),	
-            ]),body=True, color="#AF7AC5")),	
+             dbc.Row(dbc.Card(html.Div([    
+                dcc.Checklist(  
+                    id="checklist1",    
+                    value=all_dep[3:],  
+                    labelStyle={'display': 'inline-block'}  
+                ),  
+                dcc.Graph(id="line-chart1"),    
+            ]),body=True, color="#AF7AC5")),    
 
-             dbc.Row(dbc.Card(html.Div([	
-                dcc.Dropdown(	
-                    id="dropdown",	
-                    options=[{"label":"Les deux","value":0}, {"label":"Hommes","value":1}, {"label":"Femmes","value":2}],	
-                    value=0,	
-                    clearable=False,	
-             ),	
-                dcc.Graph(id="line-chart2"),	
-                dcc.Graph(id="line-chart3"),	
-        ]), body=True, color="#9B59B6")),	
+             dbc.Row(dbc.Card(html.Div([    
+                dcc.Dropdown(   
+                    id="dropdown",  
+                    options=[{"label":"Les deux","value":0}, {"label":"Hommes","value":1}, {"label":"Femmes","value":2}],   
+                    value=0,    
+                    clearable=False,    
+             ), 
+                dcc.Graph(id="line-chart2"),    
+                dcc.Graph(id="line-chart3"),    
+        ]), body=True, color="#9B59B6")),   
 
-            dbc.Row(dbc.Card(html.Div([	
-                dcc.Dropdown(	
-                    id="dropdown1",	
-                    options=[{"label":"Guadeloupe","value":1},{"label":"Martinique","value":2},{"label":"Guyane","value":3},	
-                    {"label":"Reunion","value":4},{"label":"Mayotte","value":6},{"label":"Île-de-France","value":11},	
-                    {"label":"Centre-Val de Loire","value":24},{"label":"Bourgogne","value":27},{"label":"Normandie","value":28},	
-                    {"label":"Hauts-de-France","value":32},{"label":"Grand-Est","value":44},{"label":"Pays de la Loire","value":52},	
-                    {"label":"Bretagne","value":53},{"label":"Nouvelle Aquitaine","value":75},{"label":"Occitanie","value":76},	
-                    {"label":"Auvergne","value":84},{"label":"PACA","value":93},{"label":"Corse","value":94}],	
-                    value=all_reg[0],	
-                    clearable=False,	
-             ),	
-                dcc.Graph(id="line-chart4"),	
-                dcc.Dropdown(	
-                    id="dropdown2",	
-                    options=[{"label":"Guadeloupe","value":1},{"label":"Martinique","value":2},{"label":"Guyane","value":3},	
-                    {"label":"Reunion","value":4},{"label":"Mayotte","value":6},{"label":"Île-de-France","value":11},	
-                    {"label":"Centre-Val de Loire","value":24},{"label":"Bourgogne","value":27},{"label":"Normandie","value":28},	
-                    {"label":"Hauts-de-France","value":32},{"label":"Grand-Est","value":44},{"label":"Pays de la Loire","value":52},	
-                    {"label":"Bretagne","value":53},{"label":"Nouvelle Aquitaine","value":75},{"label":"Occitanie","value":76},	
-                    {"label":"Auvergne","value":84},{"label":"PACA","value":93},{"label":"Corse","value":94}],	
-                    value=all_reg[0],	
-                    clearable=False,	
-             ),	
-                dcc.Graph(id="line-chart5"),	
-        ]), body=True, color="#7D3C98")),	
+            dbc.Row(dbc.Card(html.Div([ 
+                dcc.Dropdown(   
+                    id="dropdown1", 
+                    options=[{"label":"Guadeloupe","value":1},{"label":"Martinique","value":2},{"label":"Guyane","value":3},    
+                    {"label":"Reunion","value":4},{"label":"Mayotte","value":6},{"label":"Île-de-France","value":11},   
+                    {"label":"Centre-Val de Loire","value":24},{"label":"Bourgogne","value":27},{"label":"Normandie","value":28},   
+                    {"label":"Hauts-de-France","value":32},{"label":"Grand-Est","value":44},{"label":"Pays de la Loire","value":52},    
+                    {"label":"Bretagne","value":53},{"label":"Nouvelle Aquitaine","value":75},{"label":"Occitanie","value":76}, 
+                    {"label":"Auvergne","value":84},{"label":"PACA","value":93},{"label":"Corse","value":94}],  
+                    value=all_reg[0],   
+                    clearable=False,    
+             ), 
+                dcc.Graph(id="line-chart4"),    
+                dcc.Dropdown(   
+                    id="dropdown2", 
+                    options=[{"label":"Guadeloupe","value":1},{"label":"Martinique","value":2},{"label":"Guyane","value":3},    
+                    {"label":"Reunion","value":4},{"label":"Mayotte","value":6},{"label":"Île-de-France","value":11},   
+                    {"label":"Centre-Val de Loire","value":24},{"label":"Bourgogne","value":27},{"label":"Normandie","value":28},   
+                    {"label":"Hauts-de-France","value":32},{"label":"Grand-Est","value":44},{"label":"Pays de la Loire","value":52},    
+                    {"label":"Bretagne","value":53},{"label":"Nouvelle Aquitaine","value":75},{"label":"Occitanie","value":76}, 
+                    {"label":"Auvergne","value":84},{"label":"PACA","value":93},{"label":"Corse","value":94}],  
+                    value=all_reg[0],   
+                    clearable=False,    
+             ), 
+                dcc.Graph(id="line-chart5"),    
+        ]), body=True, color="#7D3C98")),   
 
-            dbc.Row(dbc.Card(html.Div([	
-                dcc.Dropdown(	
-                    id="dropdown3",	
-                    options=[{"label":"Guadeloupe","value":1},{"label":"Martinique","value":2},{"label":"Guyane","value":3},	
-                    {"label":"Reunion","value":4},{"label":"Mayotte","value":6},{"label":"Île-de-France","value":11},	
-                    {"label":"Centre-Val de Loire","value":24},{"label":"Bourgogne","value":27},{"label":"Normandie","value":28},	
-                    {"label":"Hauts-de-France","value":32},{"label":"Grand-Est","value":44},{"label":"Pays de la Loire","value":52},	
-                    {"label":"Bretagne","value":53},{"label":"Nouvelle Aquitaine","value":75},{"label":"Occitanie","value":76},	
-                    {"label":"Auvergne","value":84},{"label":"PACA","value":93},{"label":"Corse","value":94}],	
-                    value=all_reg[0],	
-                    clearable=False,	
-             ),	
-                dcc.Graph(id="line-chart6"),	
-                dcc.Dropdown(	
-                    id="dropdown4",	
-                    options=[{"label":"Guadeloupe","value":1},{"label":"Martinique","value":2},{"label":"Guyane","value":3},	
-                    {"label":"Reunion","value":4},{"label":"Mayotte","value":6},{"label":"Île-de-France","value":11},	
-                    {"label":"Centre-Val de Loire","value":24},{"label":"Bourgogne","value":27},{"label":"Normandie","value":28},	
-                    {"label":"Hauts-de-France","value":32},{"label":"Grand-Est","value":44},{"label":"Pays de la Loire","value":52},	
-                    {"label":"Bretagne","value":53},{"label":"Nouvelle Aquitaine","value":75},{"label":"Occitanie","value":76},	
-                    {"label":"Auvergne","value":84},{"label":"PACA","value":93},{"label":"Corse","value":94}],	
-                    value=all_reg[0],	
-                    clearable=False,	
-             ),	
-                dcc.Graph(id="line-chart7"),	
+            dbc.Row(dbc.Card(html.Div([ 
+                dcc.Dropdown(   
+                    id="dropdown3", 
+                    options=[{"label":"Guadeloupe","value":1},{"label":"Martinique","value":2},{"label":"Guyane","value":3},    
+                    {"label":"Reunion","value":4},{"label":"Mayotte","value":6},{"label":"Île-de-France","value":11},   
+                    {"label":"Centre-Val de Loire","value":24},{"label":"Bourgogne","value":27},{"label":"Normandie","value":28},   
+                    {"label":"Hauts-de-France","value":32},{"label":"Grand-Est","value":44},{"label":"Pays de la Loire","value":52},    
+                    {"label":"Bretagne","value":53},{"label":"Nouvelle Aquitaine","value":75},{"label":"Occitanie","value":76}, 
+                    {"label":"Auvergne","value":84},{"label":"PACA","value":93},{"label":"Corse","value":94}],  
+                    value=all_reg[0],   
+                    clearable=False,    
+             ), 
+                dcc.Graph(id="line-chart6"),    
+                dcc.Dropdown(   
+                    id="dropdown4", 
+                    options=[{"label":"Guadeloupe","value":1},{"label":"Martinique","value":2},{"label":"Guyane","value":3},    
+                    {"label":"Reunion","value":4},{"label":"Mayotte","value":6},{"label":"Île-de-France","value":11},   
+                    {"label":"Centre-Val de Loire","value":24},{"label":"Bourgogne","value":27},{"label":"Normandie","value":28},   
+                    {"label":"Hauts-de-France","value":32},{"label":"Grand-Est","value":44},{"label":"Pays de la Loire","value":52},    
+                    {"label":"Bretagne","value":53},{"label":"Nouvelle Aquitaine","value":75},{"label":"Occitanie","value":76}, 
+                    {"label":"Auvergne","value":84},{"label":"PACA","value":93},{"label":"Corse","value":94}],  
+                    value=all_reg[0],   
+                    clearable=False,    
+             ), 
+                dcc.Graph(id="line-chart7"),    
         ]), body=True, color="#C39BD3")),
             ]),
         dcc.Tab(label='France: Réanimation', value='tab-1', style=tab_style, selected_style=tab_selected_style, children=[
@@ -1150,36 +1150,36 @@ app.layout = html.Div([
                 html.Br(),
                 html.Br()])),
                 ],style={"margin":"auto"}),
-            dbc.Row([	
-                dbc.Col(html.Div([	
-                html.Br(),	
-                card_graph_dc_tps1,	
-                html.Br(),	
-                html.Br()])),	
-                ],style={"margin":"auto"}),	
+            dbc.Row([   
+                dbc.Col(html.Div([  
+                html.Br(),  
+                card_graph_dc_tps1, 
+                html.Br(),  
+                html.Br()])),   
+                ],style={"margin":"auto"}), 
 
-             dbc.Row([	
-                dbc.Col(html.Div([	
-                html.Br(),	
-                card_graph_dc_sexe1,	
-                html.Br(),	
-                html.Br()])),	
-                ],style={"margin":"auto"}),	
+             dbc.Row([  
+                dbc.Col(html.Div([  
+                html.Br(),  
+                card_graph_dc_sexe1,    
+                html.Br(),  
+                html.Br()])),   
+                ],style={"margin":"auto"}), 
 
-             dbc.Row([	
-                dbc.Col(html.Div([	
-                html.Br(),	
-                card_graph_dc_reg1,	
-                html.Br(),	
-                html.Br()])),	
-                ],style={"margin":"auto"}),	
+             dbc.Row([  
+                dbc.Col(html.Div([  
+                html.Br(),  
+                card_graph_dc_reg1, 
+                html.Br(),  
+                html.Br()])),   
+                ],style={"margin":"auto"}), 
 
-             dbc.Row([	
-                dbc.Col(html.Div([	
-                html.Br(),	
-                card_graph_dc_dep1,	
-                html.Br(),	
-                html.Br()])),	
+             dbc.Row([  
+                dbc.Col(html.Div([  
+                html.Br(),  
+                card_graph_dc_dep1, 
+                html.Br(),  
+                html.Br()])),   
                 ],style={"margin":"auto"}),
             ]),
         dcc.Tab(label='France: Vaccination', value='tab-3', style=tab_style, selected_style=tab_selected_style,children=[
@@ -1255,122 +1255,122 @@ def render_content(tab):
         ])
 
 ############################################################## Callbacks###############################################################"
-@app.callback(	
-    Output("line-chart", "figure"), 	
-    [Input("checklist", "value")])	
+@app.callback(  
+    Output("line-chart", "figure"),     
+    [Input("checklist", "value")])  
 
-def update_line_chart(continents):	
-    mask = covid_france_general.dep.isin(continents)	
-    fig = px.line(covid_france_general[mask], 	
-        x="jour", y="rea", color='dep',title="Nombre de réanimations en fonction du temps suivant les départements choisis",	
-        labels={"jour":"Date", "rea": "Nombre de réanimations"})	
-    return fig	
+def update_line_chart(continents):  
+    mask = covid_france_general.dep.isin(continents)    
+    fig = px.line(covid_france_general[mask],   
+        x="jour", y="rea", color='dep',title="Nombre de réanimations en fonction du temps suivant les départements choisis",    
+        labels={"jour":"Date", "rea": "Nombre de réanimations"})    
+    return fig  
 
-@app.callback(	
-    Output("line-chart1", "figure"), 	
-    [Input("checklist1", "value")])	
+@app.callback(  
+    Output("line-chart1", "figure"),    
+    [Input("checklist1", "value")]) 
 
-def update_line_chart(departements):	
-    mask = covid_france_general.dep.isin(departements)	
-    fig = px.line(covid_france_general[mask], 	
-        x="jour", y="dc", color='dep',title='Nombre de décès en fonction du temps suivant les départements choisis',	
-        labels={"jour":"Date","dc":"Nombre de décès"})	
-    return fig	
+def update_line_chart(departements):    
+    mask = covid_france_general.dep.isin(departements)  
+    fig = px.line(covid_france_general[mask],   
+        x="jour", y="dc", color='dep',title='Nombre de décès en fonction du temps suivant les départements choisis',    
+        labels={"jour":"Date","dc":"Nombre de décès"})  
+    return fig  
 
-@app.callback(	
-    Output("line-chart2", "figure"), 	
-    [Input("dropdown","value")])	
-def update_bar_chart(sex):	
-    mask = covid_france_general["sexe"] == sex	
-    fig = px.line(covid_france_general[mask], x="jour", y="rea", title="Nombre de réanimations en fonction du temps suivant le sexe sélectionné",	
-        labels={"jour":"Date", "rea":"Nombre de réanimations"})	
-    return fig	
+@app.callback(  
+    Output("line-chart2", "figure"),    
+    [Input("dropdown","value")])    
+def update_bar_chart(sex):  
+    mask = covid_france_general["sexe"] == sex  
+    fig = px.line(covid_france_general[mask], x="jour", y="rea", title="Nombre de réanimations en fonction du temps suivant le sexe sélectionné",   
+        labels={"jour":"Date", "rea":"Nombre de réanimations"}) 
+    return fig  
 
-@app.callback(	
-    Output("line-chart3", "figure"), 	
-    [Input("dropdown","value")])	
+@app.callback(  
+    Output("line-chart3", "figure"),    
+    [Input("dropdown","value")])    
 
-def update_bar_chart2(sex):	
-    mask = covid_france_general["sexe"] == sex	
-    fig = px.line(covid_france_general[mask], x="jour", y="dc", title="Nombre de décès en fonction du temps suivant le sexe sélectionné",	
-        labels={"jour":"Date","dc":"Nombre de décès"})	
-    return fig	
+def update_bar_chart2(sex): 
+    mask = covid_france_general["sexe"] == sex  
+    fig = px.line(covid_france_general[mask], x="jour", y="dc", title="Nombre de décès en fonction du temps suivant le sexe sélectionné",   
+        labels={"jour":"Date","dc":"Nombre de décès"})  
+    return fig  
 
-@app.callback(	
-    Output("line-chart4", "figure"), 	
-    [Input("dropdown1","value")])	
-def update_bar_chart(region):	
-    mask = covid_france_dc_age["reg"] == region	
-    fig = px.line(covid_france_dc_age[mask], x="jour", y="rea", title="Nombre de réanimations en fonction du temps dans la région sélectionnée",	
-        labels={"jour":"Date","rea":"Nombre de réanimations"})	
-    return fig	
+@app.callback(  
+    Output("line-chart4", "figure"),    
+    [Input("dropdown1","value")])   
+def update_bar_chart(region):   
+    mask = covid_france_dc_age["reg"] == region 
+    fig = px.line(covid_france_dc_age[mask], x="jour", y="rea", title="Nombre de réanimations en fonction du temps dans la région sélectionnée",    
+        labels={"jour":"Date","rea":"Nombre de réanimations"})  
+    return fig  
 
-@app.callback(	
-    Output("line-chart5", "figure"), 	
-    [Input("dropdown2","value")])	
+@app.callback(  
+    Output("line-chart5", "figure"),    
+    [Input("dropdown2","value")])   
 
-def update_bar_chart2(region):	
-    mask = covid_france_dc_age["reg"] == region	
-    fig = px.line(covid_france_dc_age[mask], x="jour", y="rea", title="Nombre de réanimations en fonction du temps dans la région sélectionnée",	
-        labels={"jour":"Date","rea":"Nombre de réanimations"})	
-    return fig	
+def update_bar_chart2(region):  
+    mask = covid_france_dc_age["reg"] == region 
+    fig = px.line(covid_france_dc_age[mask], x="jour", y="rea", title="Nombre de réanimations en fonction du temps dans la région sélectionnée",    
+        labels={"jour":"Date","rea":"Nombre de réanimations"})  
+    return fig  
 
-@app.callback(	
-    Output("line-chart6", "figure"), 	
-    [Input("dropdown3","value")])	
-def update_bar_chart(region):	
-    mask = covid_france_dc_age["reg"] == region	
-    fig = px.line(covid_france_dc_age[mask], x="jour", y="dc", title="Nombre de décès en fonction du temps dans la région sélectionnée",	
-        labels={"jour":"Date","dc":"Nombre de décès"})	
-    return fig	
+@app.callback(  
+    Output("line-chart6", "figure"),    
+    [Input("dropdown3","value")])   
+def update_bar_chart(region):   
+    mask = covid_france_dc_age["reg"] == region 
+    fig = px.line(covid_france_dc_age[mask], x="jour", y="dc", title="Nombre de décès en fonction du temps dans la région sélectionnée",    
+        labels={"jour":"Date","dc":"Nombre de décès"})  
+    return fig  
 
-@app.callback(	
-    Output("line-chart7", "figure"), 	
-    [Input("dropdown4","value")])	
+@app.callback(  
+    Output("line-chart7", "figure"),    
+    [Input("dropdown4","value")])   
 
-def update_bar_chart2(region):	
-    mask = covid_france_dc_age["reg"] == region	
-    fig = px.line(covid_france_dc_age[mask], x="jour", y="dc", title="Nombre de décès en fonction du temps dans la région sélectionnée",	
-        labels={"jour":"Date","dc":"Nombre de décès"})	
-    return fig	
+def update_bar_chart2(region):  
+    mask = covid_france_dc_age["reg"] == region 
+    fig = px.line(covid_france_dc_age[mask], x="jour", y="dc", title="Nombre de décès en fonction du temps dans la région sélectionnée",    
+        labels={"jour":"Date","dc":"Nombre de décès"})  
+    return fig  
 
-@app.callback(	
-    Output("line-chart8", "figure"), 	
-    [Input("dropdown5","value")])	
-def update_bar_chart(pays):	
-    mask = df_monde["Country"] == pays	
-    fig = px.line(df_monde[mask], x="date", y="New_cases", title="Nombre de nouveaux cas au cours du temps dans le pays sélectionnée",	
-        labels={"date":"Date","New_cases":"Nombre de nouveaux cas"})	
-    return fig	
+@app.callback(  
+    Output("line-chart8", "figure"),    
+    [Input("dropdown5","value")])   
+def update_bar_chart(pays): 
+    mask = df_monde["Country"] == pays  
+    fig = px.line(df_monde[mask], x="Date_reported", y="New_cases", title="Nombre de nouveaux cas au cours du temps dans le pays sélectionnée",  
+        labels={"Date_reported":"Date","New_cases":"Nombre de nouveaux cas"})    
+    return fig  
 
-@app.callback(	
-    Output("line-chart9", "figure"), 	
-    [Input("dropdown6","value")])	
+@app.callback(  
+    Output("line-chart9", "figure"),    
+    [Input("dropdown6","value")])   
 
-def update_bar_chart2(pays):	
-    mask = df_monde["Country"] == pays	
-    fig = px.line(df_monde[mask], x="date", y="New_cases", title="Nombre de nouveaux cas au cours du temps dans le pays sélectionnée",	
-        labels={"date":"Date","New_cases":"Nombre de nouveaux cas"})	
-    return fig	
+def update_bar_chart2(pays):    
+    mask = df_monde["Country"] == pays  
+    fig = px.line(df_monde[mask], x="Date_reported", y="New_cases", title="Nombre de nouveaux cas au cours du temps dans le pays sélectionnée",  
+        labels={"Date_reported":"Date","New_cases":"Nombre de nouveaux cas"})    
+    return fig  
 
-@app.callback(	
-    Output("line-chart10", "figure"), 	
-    [Input("dropdown7","value")])	
-def update_bar_chart(pays):	
-    mask = df_monde["Country"] == pays	
-    fig = px.line(df_monde[mask], x="date", y="New_deaths", title="Nombre de nouveaux décès au cours du temps dans le pays sélectionnée",	
-        labels={"date":"Date","New_deaths":"Nombre de nouveaux décès"})	
-    return fig	
+@app.callback(  
+    Output("line-chart10", "figure"),   
+    [Input("dropdown7","value")])   
+def update_bar_chart(pays): 
+    mask = df_monde["Country"] == pays  
+    fig = px.line(df_monde[mask], x="Date_reported", y="New_deaths", title="Nombre de nouveaux décès au cours du temps dans le pays sélectionnée",   
+        labels={"Date_reported":"Date","New_deaths":"Nombre de nouveaux décès"}) 
+    return fig  
 
-@app.callback(	
-    Output("line-chart11", "figure"), 	
-    [Input("dropdown8","value")])	
+@app.callback(  
+    Output("line-chart11", "figure"),   
+    [Input("dropdown8","value")])   
 
-def update_bar_chart2(pays):	
-    mask = df_monde["Country"] == pays	
-    fig = px.line(df_monde[mask], x="date", y="New_deaths", title="Nombre de nouveaux décès au cours du temps dans le pays sélectionnée",	
-        labels={"date":"Date","New_deaths":"Nombre de nouveaux décès"})	
-    return fig	
+def update_bar_chart2(pays):    
+    mask = df_monde["Country"] == pays  
+    fig = px.line(df_monde[mask], x="Date_reported", y="New_deaths", title="Nombre de nouveaux décès au cours du temps dans le pays sélectionnée",   
+        labels={"Date_reported":"Date","New_deaths":"Nombre de nouveaux décès"}) 
+    return fig  
 
 
 if __name__ == '__main__':
