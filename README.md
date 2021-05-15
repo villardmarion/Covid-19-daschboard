@@ -192,7 +192,6 @@ Study of the number of complete vaccinations according to the regions:
 ![Capture d’écran 2021-05-15 à 21 43 22](https://user-images.githubusercontent.com/83781622/118376154-94d3e980-b5c6-11eb-8286-cf533c8e856d.png)
 
 
-### Analyse de survie
 
 # Modélisation SIR:
 Source de ce jeu de données : https://coronavirus.politologue.com - Les données proposées dans ce fichier sont une compilation des données proposées par le CSSE (The Johns Hopkins University) https://gisanddata.maps.arcgis.com/apps/opsdashboard/index.html#/bda7594740fd40299423467b48e9ecf6
