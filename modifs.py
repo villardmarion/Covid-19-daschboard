@@ -97,8 +97,8 @@ covid_france_vacc_reg_url = (
 covid_france_vacc_reg = pd.read_csv(covid_france_vacc_reg_url, sep=";")
 covid_france_vacc_reg['reg'] = covid_france_vacc_reg['reg'].astype(str)
 
-#warnings.filterwarnings("ignore")
 
+#####################################LAYOUT###############################################
 # styling the tabs
 tabs_styles = {
     'height': '44px'
@@ -117,6 +117,7 @@ tab_selected_style = {
     'padding': '6px'
 }
 
+# Creating the Cards
 def create_card(title, content, date):
     card=[
         dbc.CardHeader([html.H2(title)]),
@@ -313,6 +314,113 @@ cards_vacc = html.Div(
         ),
     ]
 )
+
+############################################## Visualisations####################################################################
+
+# Monde visualisations:
+## New cases graphique:
+monde_cases_time = df_monde[['Date_reported','New_cases']].groupby('Date_reported', as_index=False).sum()
+def update_graph_monde(title):
+    fig_time = px.line(monde_cases_time, x=monde_cases_time['Date_reported'], y=monde_cases_time['New_cases'], title=title)
+    fig_time.update_xaxes(rangeslider_visible=True)
+    return fig_time
+    
+card_graph_world_time = dbc.Card(
+    dcc.Graph(id='my-graph-world_time', figure=update_graph_monde("Evolution du nombre de nouvaux cas dans le monde")), body=True, color ='#f2ffff',
+    )
+card_graph_world1 = html.Div(
+    [
+        dbc.Row(
+            [
+                dbc.Col(card_graph_world_time),
+            ],
+            className='mb-6',
+        ),
+    ]
+)
+     
+     
+monde_cases = df_monde[['New_cases','WHO_region']].groupby('WHO_region', as_index=False).sum()
+def update_graph_monde3(title):
+    fig_time = px.bar(monde_cases, x=monde_cases['WHO_region'], y=monde_cases['New_cases'], color=monde_cases['WHO_region'], title=title)
+    return fig_time
+    
+card_graph_world_time3 = dbc.Card(
+    dcc.Graph(id='my-graph-world_time3', figure=update_graph_monde3("Nombre total de cas par région dans le monde")), body=True, color ='#f2ffff',
+    )
+card_graph_world3 = html.Div(
+    [
+        dbc.Row(
+            [
+                dbc.Col(card_graph_world_time3),
+            ],
+            className='mb-6',
+        ),
+    ]
+)
+## New deaths graphics:
+      
+monde_deaths_time = df_monde[['Date_reported','New_deaths']].groupby('Date_reported', as_index=False).sum()
+def update_graph_monde2(title):
+    fig_time = px.line(monde_deaths_time, x=monde_deaths_time['Date_reported'], y=monde_deaths_time['New_deaths'], title=title)
+    fig_time.update_xaxes(rangeslider_visible=True)
+    return fig_time
+    
+card_graph_world_time2 = dbc.Card(
+    dcc.Graph(id='my-graph-world_time2', figure=update_graph_monde2("Evolution du nombre de décès dans le monde")), body=True, color ='#f2ffff',
+    )
+card_graph_world2 = html.Div(
+    [
+        dbc.Row(
+            [
+                dbc.Col(card_graph_world_time2),
+            ],
+            className='mb-6',
+        ),
+    ]
+)
+   
+
+monde_deaths = df_monde[['New_deaths','WHO_region']].groupby('WHO_region', as_index=False).sum()
+def update_graph_monde5(title):
+    fig_time = px.bar(monde_deaths, x=monde_deaths['WHO_region'], y=monde_deaths['New_deaths'], color=monde_deaths['WHO_region'], title=title)
+    return fig_time
+    
+card_graph_world_time5 = dbc.Card(
+    dcc.Graph(id='my-graph-world_time5', figure=update_graph_monde5("Nombre total de décès par région dans le monde")), body=True, color ='#f2ffff',
+    )
+card_graph_world5 = html.Div(
+    [
+        dbc.Row(
+            [
+                dbc.Col(card_graph_world_time5),
+            ],
+            className='mb-6',
+        ),
+    ]
+)
+  
+# vaccination dans le monde:
+        
+def update_graph_monde4(title):
+    fig_time = px.bar(df_monde_vacc, x='COUNTRY', y='TOTAL_VACCINATIONS', color='WHO_REGION', title=title)
+    return fig_time
+    
+card_graph_world_time4 = dbc.Card(
+    dcc.Graph(id='my-graph-world_time4', figure=update_graph_monde4("Population vaccinée dans le monde")), body=True, color ='#f2ffff',
+    )
+
+card_graph_world4 = html.Div(
+    [
+        dbc.Row(
+            [
+                dbc.Col(card_graph_world_time4),
+            ],
+            className='mb-6',
+        ),
+    ]
+)      
+
 
 ## Graphiques réanimations
 
@@ -682,112 +790,7 @@ card_graph_reg1 = html.Div(
     ]
 )
 
-
-# Monde visualisations:
-## New cases graphique:
-monde_cases_time = df_monde[['Date_reported','New_cases']].groupby('Date_reported', as_index=False).sum()
-def update_graph_monde(title):
-    fig_time = px.line(monde_cases_time, x=monde_cases_time['Date_reported'], y=monde_cases_time['New_cases'], title=title)
-    fig_time.update_xaxes(rangeslider_visible=True)
-    return fig_time
-    
-card_graph_world_time = dbc.Card(
-    dcc.Graph(id='my-graph-world_time', figure=update_graph_monde("Evolution du nombre de nouvaux cas dans le monde")), body=True, color ='#f2ffff',
-    )
-card_graph_world1 = html.Div(
-    [
-        dbc.Row(
-            [
-                dbc.Col(card_graph_world_time),
-            ],
-            className='mb-6',
-        ),
-    ]
-)
-     
-     
-monde_cases = df_monde[['New_cases','WHO_region']].groupby('WHO_region', as_index=False).sum()
-def update_graph_monde3(title):
-    fig_time = px.bar(monde_cases, x=monde_cases['WHO_region'], y=monde_cases['New_cases'], color=monde_cases['WHO_region'], title=title)
-    return fig_time
-    
-card_graph_world_time3 = dbc.Card(
-    dcc.Graph(id='my-graph-world_time3', figure=update_graph_monde3("Nombre total de cas par région dans le monde")), body=True, color ='#f2ffff',
-    )
-card_graph_world3 = html.Div(
-    [
-        dbc.Row(
-            [
-                dbc.Col(card_graph_world_time3),
-            ],
-            className='mb-6',
-        ),
-    ]
-)
-## New deaths graphics:
-      
-monde_deaths_time = df_monde[['Date_reported','New_deaths']].groupby('Date_reported', as_index=False).sum()
-def update_graph_monde2(title):
-    fig_time = px.line(monde_deaths_time, x=monde_deaths_time['Date_reported'], y=monde_deaths_time['New_deaths'], title=title)
-    fig_time.update_xaxes(rangeslider_visible=True)
-    return fig_time
-    
-card_graph_world_time2 = dbc.Card(
-    dcc.Graph(id='my-graph-world_time2', figure=update_graph_monde2("Evolution du nombre de décès dans le monde")), body=True, color ='#f2ffff',
-    )
-card_graph_world2 = html.Div(
-    [
-        dbc.Row(
-            [
-                dbc.Col(card_graph_world_time2),
-            ],
-            className='mb-6',
-        ),
-    ]
-)
-   
-
-monde_deaths = df_monde[['New_deaths','WHO_region']].groupby('WHO_region', as_index=False).sum()
-def update_graph_monde5(title):
-    fig_time = px.bar(monde_deaths, x=monde_deaths['WHO_region'], y=monde_deaths['New_deaths'], color=monde_deaths['WHO_region'], title=title)
-    return fig_time
-    
-card_graph_world_time5 = dbc.Card(
-    dcc.Graph(id='my-graph-world_time5', figure=update_graph_monde5("Nombre total de décès par région dans le monde")), body=True, color ='#f2ffff',
-    )
-card_graph_world5 = html.Div(
-    [
-        dbc.Row(
-            [
-                dbc.Col(card_graph_world_time5),
-            ],
-            className='mb-6',
-        ),
-    ]
-)
-  
-# vaccination dans le monde:
-        
-def update_graph_monde4(title):
-    fig_time = px.bar(df_monde_vacc, x='COUNTRY', y='TOTAL_VACCINATIONS', color='WHO_REGION', title=title)
-    return fig_time
-    
-card_graph_world_time4 = dbc.Card(
-    dcc.Graph(id='my-graph-world_time4', figure=update_graph_monde4("Population vaccinée dans le monde")), body=True, color ='#f2ffff',
-    )
-
-card_graph_world4 = html.Div(
-    [
-        dbc.Row(
-            [
-                dbc.Col(card_graph_world_time4),
-            ],
-            className='mb-6',
-        ),
-    ]
-)      
-
-
+########################################### Data Table################################################
 # conditions on the world data table:      
 style_dataconditional=[
                    {
