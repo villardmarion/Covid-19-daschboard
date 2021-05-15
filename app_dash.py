@@ -2,7 +2,7 @@
 """
 Created on Fri Apr 30 20:56:44 2021
 
-@author: Naima
+@author: Naima, Noémie
 """
 import dash
 import dash_core_components as dcc
