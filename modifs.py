@@ -9,28 +9,21 @@ import numpy as np
 import dash_bootstrap_components as dbc
 import plotly.express as px
 
-#import warnings
-#from six import PY3
-external_stylesheets = ['https://codepen.io/chriddyp/pen/bWLwgP.css']
 
 app = dash.Dash(__name__,external_stylesheets=[dbc.themes.BOOTSTRAP])
-dash_colors = {
-    'background': '#f2ffff',
-    'text': '#101b32',
-    'grid': '#333333',
-    'red': '#BF0010',
-    'blue': '#809cd5',
-    'green': '#46c299'
-}
+
+
+#####################################DATA########################################
 
 ## Données monde général
 covid_monde_url = ("https://covid19.who.int/WHO-COVID-19-global-data.csv")
 df_monde = pd.read_csv(covid_monde_url, sep=",")
-df_monde['date'] = pd.to_datetime(df_monde['Date_reported'])
+df_monde['Date_reported'] = pd.to_datetime(df_monde['Date_reported'], format='%Y-%m-%d')
 
 ## Données vaccination dans le monde
 covid_monde_vaccination_url = ("https://covid19.who.int/who-data/vaccination-data.csv")
 df_monde_vacc = pd.read_csv(covid_monde_vaccination_url, sep=",")
+df_monde_vacc['DATE_UPDATED'] = pd.to_datetime(df_monde_vacc['DATE_UPDATED'],format='%Y-%m-%d')
 
 covid_url = ("https://www.data.gouv.fr/fr/datasets/r/900da9b0-8987-4ba7-b117-7aea0e53f530")
 df = pd.read_csv(covid_url, sep=";")
@@ -67,21 +60,6 @@ covid_france_rea_age_url = (
 covid_france_rea_age = pd.read_csv(covid_france_rea_age_url, sep=";")
 covid_france_rea_age['date']=pd.to_datetime(covid_france_rea_age['jour'])
 
-##Données des graphiques des décès
-# Graphique en fonction du temps, du sexe et du département
-covid_france_dc_tps_sexe_url = (
-        "https://www.data.gouv.fr/fr/datasets/r/63352e38-d353-4b54-bfd1-f1b3ee1cabd7"
-        )
-covid_france_dc_tps_sexe = pd.read_csv(covid_france_dc_tps_sexe_url, sep=";")
-covid_france_dc_tps_sexe['date']=pd.to_datetime(covid_france_dc_tps_sexe['jour'])
-
-# Graphique en fonction de la classe d'âge et de la région
-covid_france_dc_age_url = (
-        "https://www.data.gouv.fr/fr/datasets/r/08c18e08-6780-452d-9b8c-ae244ad529b3"
-        )
-covid_france_dc_age = pd.read_csv(covid_france_dc_age_url, sep=";")
-covid_france_dc_age['date']=pd.to_datetime(covid_france_dc_age['jour'])
-
 ## Données des graphiques de vaccination 
 #Graph en fonction du temps
 covid_france_vaccination_url = (
@@ -89,6 +67,21 @@ covid_france_vaccination_url = (
         )
 covid_france_vaccination = pd.read_csv(covid_france_vaccination_url, sep=";")
 covid_france_vaccination['date'] = pd.to_datetime(covid_france_vaccination['jour'])
+
+##Données des graphiques des décès	
+# Graphique en fonction du temps, du sexe et du département	
+covid_france_dc_tps_sexe_url = (	
+        "https://www.data.gouv.fr/fr/datasets/r/63352e38-d353-4b54-bfd1-f1b3ee1cabd7"	
+        )	
+covid_france_dc_tps_sexe = pd.read_csv(covid_france_dc_tps_sexe_url, sep=";")	
+covid_france_dc_tps_sexe['date']=pd.to_datetime(covid_france_dc_tps_sexe['jour'])	
+
+# Graphique en fonction de la classe d'âge et de la région	
+covid_france_dc_age_url = (	
+        "https://www.data.gouv.fr/fr/datasets/r/08c18e08-6780-452d-9b8c-ae244ad529b3"	
+        )	
+covid_france_dc_age = pd.read_csv(covid_france_dc_age_url, sep=";")	
+covid_france_dc_age['date']=pd.to_datetime(covid_france_dc_age['jour'])
 
 #Graph en fonction de la classe d'âge
 covid_france_vacc_age_url = (
@@ -140,19 +133,19 @@ def create_card(title, content, date):
 sum_cases_monde = df_monde['New_cases'].sum() 
 sum_deaths = df_monde['New_deaths'].sum()
 sum_vaccination = df_monde_vacc['TOTAL_VACCINATIONS'].sum()
-date_recente = max(df_monde['date'])
-covid_monde_last_day = df_monde[df_monde.date == date_recente]
+date_recente = max(df_monde['Date_reported'])
+covid_monde_last_day = df_monde[df_monde.Date_reported == date_recente]
 sum_cases_last_day = covid_monde_last_day['New_cases'].sum()
 sum_deaths_last_day = covid_monde_last_day['New_deaths'].sum()
 
 date_recente_str = date_recente.strftime('%Y-%m-%d')
 
 #Indicateurs du monde
-card1=create_card("Nombre de cas", sum_cases_monde, date_recente_str)
-card2=create_card("Nombre de décès", sum_deaths, date_recente_str)
-card3=create_card("Nombre de vaccinations", sum_vaccination,date_recente_str)
-card4=create_card("Nombre de cas du jour", sum_cases_last_day,date_recente_str)
-card5=create_card("Nombre de décès du jour", sum_deaths_last_day,date_recente_str)
+card1=create_card("Nombre accumulé de cas", sum_cases_monde, date_recente_str)
+card2=create_card("Nombre accumulé de décès", sum_deaths, date_recente_str)
+card3=create_card("Nombre total de vaccinations", sum_vaccination,date_recente_str)
+card4=create_card("Nombre total de nouveaux cas", sum_cases_last_day,date_recente_str)
+card5=create_card("Nombre total de nouveaux décès", sum_deaths_last_day,date_recente_str)
 
 cards = html.Div(
     [
@@ -223,7 +216,7 @@ mise_a_jour_vacc = date_vacc.strftime('%Y-%m-%d')
 
 # Indicateurs France
 
-card_fr1=create_card("Nombre de décès", f'{total_deces_general} dont {total_deces_hosp} en milieu hospitalier', dernier_jour_gen_str)
+card_fr1=create_card("Nombre total de décès", f'{total_deces_general} dont {total_deces_hosp} en milieu hospitalier', dernier_jour_gen_str)
 card_fr2=create_card("Nombre de réanimations", total_rea,dernier_jour_hosp_str)
 card_fr3=create_card("Nombre des hospitalisations", total_hosp,dernier_jour_hosp_str)
 card_fr4=create_card("Nombre de vaccinations complètes",total_vaccination_fr, mise_a_jour_vacc)
@@ -244,7 +237,7 @@ cards_fr = html.Div(
 
 # Indicateurs réanimations
 
-card_rea1=create_card("Nombre de réanimations", total_rea, dernier_jour_hosp_str)
+card_rea1=create_card("Nombre total d'admission en réanimations", total_rea, dernier_jour_hosp_str)
 card_rea2=create_card("Nombre de réanimations chez les hommes en milieu hospitalier", rea_homme,dernier_jour_gen_str)
 card_rea3=create_card("Nombre de réanimations chez les femmes en milieu hospitalier", rea_femme,dernier_jour_gen_str)
 card_rea4=create_card("Nombre de réanimations du jour", nombre_rea_jour,dernier_jour_hosp_str)
@@ -253,10 +246,10 @@ cards_rea = html.Div(
     [
         dbc.Row(
             [
-                dbc.Col(dbc.Card(card_rea1, color="#FDEBD0", inverse=True)),
-                dbc.Col(dbc.Card(card_rea2, color="#FAD7A0", inverse=True)),
-                dbc.Col(dbc.Card(card_rea3, color="#F8C471", inverse=True)),
-                dbc.Col(dbc.Card(card_rea4, color="#F5B041", inverse=True)),
+                dbc.Col(dbc.Card(card_rea1, color="#ffb732", inverse=True)),
+                dbc.Col(dbc.Card(card_rea2, color="#ffae19", inverse=True)),
+                dbc.Col(dbc.Card(card_rea3, color="#ffa500", inverse=True)),
+                dbc.Col(dbc.Card(card_rea4, color="#e59400", inverse=True)),
 
             ],
             className="mb-2",
@@ -324,10 +317,9 @@ cards_vacc = html.Div(
 ## Graphiques réanimations
 
 # Graphique réanimation en fonction du temps
-covid_france_dc_tot = covid_france_rea_tps_sexe[covid_france_rea_tps_sexe.sexe == 0]
-dernier_jour_rea_age = max(covid_france_rea_tps_sexe["date"])
+covid_france_dc_tot = covid_france_rea_tps_sexe[covid_france_rea_tps_sexe.sexe == 0]	
+dernier_jour_rea_age = max(covid_france_rea_tps_sexe["date"])	
 covid_france_dernier_jour_rea = covid_france_rea_tps_sexe[covid_france_rea_tps_sexe.date == dernier_jour_rea_age]
-
 evol_rea = covid_france_rea_tps_sexe[['date','rea']].groupby('date', as_index=False).sum()
 
 def update_graph_rea_tps(title):
@@ -352,10 +344,7 @@ card_graph_rea_tps1 = html.Div(
 
 # Graphique réanimation en fonction de la classe d'âge
 
-dernier_jour_rea = max(covid_france_rea_age["date"])
-covid_france_dernier_jour_age_rea = covid_france_rea_age[covid_france_rea_age.date == dernier_jour_rea]
-
-age_rea = covid_france_dernier_jour_age_rea[['cl_age90','rea']].groupby('cl_age90', as_index=False).sum()
+age_rea = covid_france_rea_age[['cl_age90','rea']].groupby('cl_age90', as_index=False).sum()
 age_rea['cl_age90_str'] = ["Toutes","9-19","19-29","29-39","39-49","49-59","59-69","69-79","79-89","89-90","+ de 90"]
 
 def update_graph_rea_age(title):
@@ -368,8 +357,11 @@ card_graph_rea_age = dbc.Card(
     )
 
 # Graphique réanimation en fonction du sexe
+dernier_jour_rea = max(covid_france_rea_age["date"])
+covid_france_dernier_jour_age_rea = covid_france_rea_age[covid_france_rea_age.date == dernier_jour_rea]	
 
-sexe_rea = covid_france_dernier_jour_rea[['sexe','rea']].groupby('sexe', as_index=False).sum()
+age_rea = covid_france_dernier_jour_age_rea[['cl_age90','rea']].groupby('cl_age90', as_index=False).sum()
+sexe_rea = covid_france_rea_tps_sexe[['sexe','rea']].groupby('sexe', as_index=False).sum()
 sexe_rea['sexe_str'] = ["Les deux","Hommes","Femmes"]
 
 def update_graph_rea_sexe(title):
@@ -448,125 +440,125 @@ card_graph_rea_dep1 = html.Div(
     ]
 )
 
-## Graphique des décès 
-# Graphique des décès en fonction du temps
-covid_france_dc_tot = covid_france_dc_tps_sexe[covid_france_dc_tps_sexe.sexe == 0]
-dernier_jour_dc1 = max(covid_france_dc_tps_sexe["date"])
-covid_france_dernier_jour_dc1 = covid_france_dc_tps_sexe[covid_france_dc_tps_sexe.date == dernier_jour_dc1]
+## Graphique des décès 	
+# Graphique des décès en fonction du temps	
+covid_france_dc_tot = covid_france_dc_tps_sexe[covid_france_dc_tps_sexe.sexe == 0]	
+dernier_jour_dc1 = max(covid_france_dc_tps_sexe["date"])	
+covid_france_dernier_jour_dc1 = covid_france_dc_tps_sexe[covid_france_dc_tps_sexe.date == dernier_jour_dc1]	
 
-evol_dc = covid_france_dc_tot[['date','dc']].groupby('date', as_index=False).sum()
-def update_graph_dc_tps(title):
-    fig_tps_dc = px.line(evol_dc, x=evol_dc['date'], y=evol_dc['dc'], title=title)
+evol_dc = covid_france_dc_tot[['date','dc']].groupby('date', as_index=False).sum()	
+def update_graph_dc_tps(title):	
+    fig_tps_dc = px.line(evol_dc, x=evol_dc['date'], y=evol_dc['dc'], title=title)	
 
-    return fig_tps_dc
+    return fig_tps_dc	
 
-card_graph_dc_tps = dbc.Card(
-    dcc.Graph(id='my-graph-dc-tps', figure=update_graph_dc_tps("Evolution du nombre total de décès")), body=True, color ='#EC7063',
-    )
-card_graph_dc_tps1 = html.Div(
-    [
-        dbc.Row(
-            [
-                dbc.Col(card_graph_dc_tps),
-            ],
-            className='mb-6',
-        ),
-    ]
-)
+card_graph_dc_tps = dbc.Card(	
+    dcc.Graph(id='my-graph-dc-tps', figure=update_graph_dc_tps("Evolution du nombre total de décès")), body=True, color ='#EC7063',	
+    )	
+card_graph_dc_tps1 = html.Div(	
+    [	
+        dbc.Row(	
+            [	
+                dbc.Col(card_graph_dc_tps),	
+            ],	
+            className='mb-6',	
+        ),	
+    ]	
+)	
 
-# Graphique des décès en fonction de la classe d'âge
-dernier_jour_dc = max(covid_france_dc_age["date"])
-covid_france_dernier_jour_dc = covid_france_dc_age[covid_france_dc_age.date == dernier_jour_dc]
+# Graphique des décès en fonction de la classe d'âge	
+dernier_jour_dc = max(covid_france_dc_age["date"])	
+covid_france_dernier_jour_dc = covid_france_dc_age[covid_france_dc_age.date == dernier_jour_dc]	
 
-age_dc = covid_france_dernier_jour_dc[['cl_age90','dc']].groupby('cl_age90', as_index=False).sum()
-age_dc['cl_age90'] = age_dc['cl_age90'].astype(str)
-age_dc['cl_age90_str'] = ["Toutes","9-19","19-29","29-39","39-49","49-59","59-69","69-79","79-89","89-90","+ de 90"]
+age_dc = covid_france_dernier_jour_dc[['cl_age90','dc']].groupby('cl_age90', as_index=False).sum()	
+age_dc['cl_age90'] = age_dc['cl_age90'].astype(str)	
+age_dc['cl_age90_str'] = ["Toutes","9-19","19-29","29-39","39-49","49-59","59-69","69-79","79-89","89-90","+ de 90"]	
 
-def update_graph_dc_age(title):
-    fig_age_dc = px.bar(age_dc, x=age_dc['cl_age90_str'], y=age_dc['dc'], title=title, text=age_dc['dc'])
-    fig_age_dc.update_traces(textposition='outside')
-    return fig_age_dc
+def update_graph_dc_age(title):	
+    fig_age_dc = px.bar(age_dc, x=age_dc['cl_age90_str'], y=age_dc['dc'], title=title, text=age_dc['dc'])	
+    fig_age_dc.update_traces(textposition='outside')	
+    return fig_age_dc	
 
-card_graph_dc_age = dbc.Card(
-    dcc.Graph(id='my-graph-dc-age', figure=update_graph_dc_age("Nombre total de décès en fonction de la classe d'âge")), body=True, color ='#E74C3C',
-    )
+card_graph_dc_age = dbc.Card(	
+    dcc.Graph(id='my-graph-dc-age', figure=update_graph_dc_age("Nombre total de décès en fonction de la classe d'âge")), body=True, color ='#E74C3C',	
+    )	
 
-# Graphique des décès en fonction du sexe
-sexe_dc = covid_france_dernier_jour_dc1[['sexe','dc']].groupby('sexe', as_index=False).sum()
-sexe_dc['sexe_str'] = ["Les deux","Hommes","Femmes"]
+# Graphique des décès en fonction du sexe	
+sexe_dc = covid_france_dernier_jour_dc1[['sexe','dc']].groupby('sexe', as_index=False).sum()	
+sexe_dc['sexe_str'] = ["Les deux","Hommes","Femmes"]	
 
-def update_graph_dc_sexe(title):
-    fig_dc_sexe = px.bar(sexe_dc, x=sexe_dc['sexe_str'], y=sexe_dc['dc'], title=title, text=sexe_dc['dc'])
-    fig_dc_sexe.update_traces(textposition='outside')
-    return fig_dc_sexe
+def update_graph_dc_sexe(title):	
+    fig_dc_sexe = px.bar(sexe_dc, x=sexe_dc['sexe_str'], y=sexe_dc['dc'], title=title, text=sexe_dc['dc'])	
+    fig_dc_sexe.update_traces(textposition='outside')	
+    return fig_dc_sexe	
 
-card_graph_dc_sexe = dbc.Card(
-    dcc.Graph(id='my-graph-dc-sexe', figure=update_graph_dc_sexe("Nombre total de décès en fonction du sexe")), body=True, color ='#E74C3C',
-    )
-card_graph_dc_sexe1 = html.Div(
-    [
-        dbc.Row(
-            [
-                dbc.Col(card_graph_dc_sexe),
-                dbc.Col(card_graph_dc_age)
-            ],
-            className='mb-6',
-        ),
-    ]
-)
+card_graph_dc_sexe = dbc.Card(	
+    dcc.Graph(id='my-graph-dc-sexe', figure=update_graph_dc_sexe("Nombre total de décès en fonction du sexe")), body=True, color ='#E74C3C',	
+    )	
+card_graph_dc_sexe1 = html.Div(	
+    [	
+        dbc.Row(	
+            [	
+                dbc.Col(card_graph_dc_sexe),	
+                dbc.Col(card_graph_dc_age)	
+            ],	
+            className='mb-6',	
+        ),	
+    ]	
+)	
 
-# Graphique des décès en fonction de la région
-reg_dc = covid_france_dernier_jour_dc[['reg','dc']].groupby('reg', as_index=False).sum()
-reg_dc['reg_str']= ["Guadeloupe","Martinique","Guyane","Reunion","Mayotte","Île-de-France",
-"Centre-Val de Loire","Bourgogne","Normandie","Hauts-de-France","Grand-Est","Pays de la Loire",
-"Bretagne","Nouvelle Aquitaine","Occitanie","Auvergne","PACA","Corse"]
+# Graphique des décès en fonction de la région	
+reg_dc = covid_france_dernier_jour_dc[['reg','dc']].groupby('reg', as_index=False).sum()	
+reg_dc['reg_str']= ["Guadeloupe","Martinique","Guyane","Reunion","Mayotte","Île-de-France",	
+"Centre-Val de Loire","Bourgogne","Normandie","Hauts-de-France","Grand-Est","Pays de la Loire",	
+"Bretagne","Nouvelle Aquitaine","Occitanie","Auvergne","PACA","Corse"]	
 
-def update_graph_dc_reg(title):
-    fig_dc_reg = px.bar(reg_dc, x=reg_dc['reg_str'], y=reg_dc['dc'], title=title, text=reg_dc['dc'])
-    fig_dc_reg.update_traces(textposition='outside')
-    return fig_dc_reg
+def update_graph_dc_reg(title):	
+    fig_dc_reg = px.bar(reg_dc, x=reg_dc['reg_str'], y=reg_dc['dc'], title=title, text=reg_dc['dc'])	
+    fig_dc_reg.update_traces(textposition='outside')	
+    return fig_dc_reg	
 
-card_graph_dc_reg = dbc.Card(
-    dcc.Graph(id='my-graph-dc-reg', figure=update_graph_dc_reg("Nombre total de décès en fonction de la région")), body=True, color ='#CB4335',
-    )
-card_graph_dc_reg1 = html.Div(
-    [
-        dbc.Row(
-            [
-                dbc.Col(card_graph_dc_reg),
-            ],
-            className='mb-6',
-        ),
-    ]
-)
+card_graph_dc_reg = dbc.Card(	
+    dcc.Graph(id='my-graph-dc-reg', figure=update_graph_dc_reg("Nombre total de décès en fonction de la région")), body=True, color ='#CB4335',	
+    )	
+card_graph_dc_reg1 = html.Div(	
+    [	
+        dbc.Row(	
+            [	
+                dbc.Col(card_graph_dc_reg),	
+            ],	
+            className='mb-6',	
+        ),	
+    ]	
+)	
 
-# Graphique des décès en fonction du département
-dep_dc = covid_france_dernier_jour_dc1[['dep','dc']].groupby('dep', as_index=False).sum()
-dep_dc_new = dep_dc.drop(dep_dc.index[96:101])
-dep_dc_new['dep_str'] = ["01","02","03","04","05","06","07","08","09","10","11","12","13",
-"14","15","16","17","18","19","21","22","23","24","25","26","27","28","29","2A","2B","30","31",
-"32","33","34","35","36","37","38","39","40","41","42","43","44","45","46","47","48","49",
-"50","51","52","53","54","55","56","57","58","59","60","61","62","63","64","65","66","67",
-"68","69","70","71","72","73","74","75","76","77","78","79","80","81","82","83","84","85",
-"86","87","88","89","90","91","92","93","94","95"]
+# Graphique des décès en fonction du département	
+dep_dc = covid_france_dernier_jour_dc1[['dep','dc']].groupby('dep', as_index=False).sum()	
+dep_dc_new = dep_dc.drop(dep_dc.index[96:101])	
+dep_dc_new['dep_str'] = ["01","02","03","04","05","06","07","08","09","10","11","12","13",	
+"14","15","16","17","18","19","21","22","23","24","25","26","27","28","29","2A","2B","30","31",	
+"32","33","34","35","36","37","38","39","40","41","42","43","44","45","46","47","48","49",	
+"50","51","52","53","54","55","56","57","58","59","60","61","62","63","64","65","66","67",	
+"68","69","70","71","72","73","74","75","76","77","78","79","80","81","82","83","84","85",	
+"86","87","88","89","90","91","92","93","94","95"]	
 
-def update_graph_dc_dep(title):
-    fig_dep_dc = px.bar(dep_dc_new, x=dep_dc_new['dep_str'], y=dep_dc_new['dc'], title=title, text=dep_dc_new['dc'])
-    fig_dep_dc.update_traces(textposition='outside')
-    return fig_dep_dc
+def update_graph_dc_dep(title):	
+    fig_dep_dc = px.bar(dep_dc_new, x=dep_dc_new['dep_str'], y=dep_dc_new['dc'], title=title, text=dep_dc_new['dc'])	
+    fig_dep_dc.update_traces(textposition='outside')	
+    return fig_dep_dc	
 
-card_graph_dc_dep = dbc.Card(
-    dcc.Graph(id='my-graph-dc-dep', figure=update_graph_dc_dep("Nombre total de décès en fonction du département")), body=True, color ='#B03A2E',
-    )
-card_graph_dc_dep1 = html.Div(
-    [
-        dbc.Row(
-            [
-                dbc.Col(card_graph_dc_dep),
-            ],
-            className='mb-6',
-        ),
-    ]
+card_graph_dc_dep = dbc.Card(	
+    dcc.Graph(id='my-graph-dc-dep', figure=update_graph_dc_dep("Nombre total de décès en fonction du département")), body=True, color ='#B03A2E',	
+    )	
+card_graph_dc_dep1 = html.Div(	
+    [	
+        dbc.Row(	
+            [	
+                dbc.Col(card_graph_dc_dep),	
+            ],	
+            className='mb-6',	
+        ),	
+    ]	
 )
 
 
@@ -690,10 +682,149 @@ card_graph_reg1 = html.Div(
     ]
 )
 
+# Monde visualisations:
+## New cases graphique:
+
+def update_graph_monde(title):
+    fig_time = px.line(df_monde, x=df_monde['Date_reported'], y=df_monde['New_cases'], color=df_monde['WHO_region'], title=title)
+    fig_time.update_xaxes(rangeslider_visible=True)
+    return fig_time
+
+card_graph_world_time = dbc.Card(
+    dcc.Graph(id='my-graph-world_time', figure=update_graph_monde("Evolution du nombre de nouvaux cas dans le monde")), body=True, color ='#f2ffff',
+    )
+card_graph_world1 = html.Div(
+    [
+        dbc.Row(
+            [
+                dbc.Col(card_graph_world_time),
+            ],
+            className='mb-6',
+        ),
+    ]
+)
+
+## New deaths graphics:
+
+
+def update_graph_monde2(title):
+    fig_time = px.line(df_monde, x=df_monde['Date_reported'], y=df_monde['New_deaths'], color=df_monde['WHO_region'], title=title)
+    fig_time.update_xaxes(rangeslider_visible=True)
+    return fig_time
+
+card_graph_world_time2 = dbc.Card(
+    dcc.Graph(id='my-graph-world_time2', figure=update_graph_monde2("Evolution du nombre de décès dans le monde")), body=True, color ='#f2ffff',
+    )
+card_graph_world2 = html.Div(
+    [
+        dbc.Row(
+            [
+                dbc.Col(card_graph_world_time2),
+            ],
+            className='mb-6',
+        ),
+    ]
+)
+
+# vaccination dans le monde:
+
+def update_graph_monde4(title):
+    fig_time = px.area(df_monde_vacc, x='DATE_UPDATED', y='TOTAL_VACCINATIONS',facet_col="WHO_REGION", color='WHO_REGION',facet_col_wrap=2, title=title)
+    return fig_time
+
+card_graph_world_time4 = dbc.Card(
+    dcc.Graph(id='my-graph-world_time4', figure=update_graph_monde4("Population vaccinée dans le monde")), body=True, color ='#f2ffff',
+    )
+
+card_graph_world4 = html.Div(
+    [
+        dbc.Row(
+            [
+                dbc.Col(card_graph_world_time4),
+            ],
+            className='mb-6',
+        ),
+    ]
+)      
+
+# conditions on the world data table:      
+style_dataconditional=[
+                   {
+                       'if': {
+                           'column_id': 'WHO_region',
+                           'filter_query': 'WHO_region eq "EURO"'
+                           },                        
+                       'backgroundColor': '#3D9970', # mettre les lignes EURO en bleu
+                       'color': 'white',
+                       },
+                    {
+                      'if': {
+                           'column_id': 'Country',
+                           'filter_query': 'Country eq "France"'
+                           },                        
+                       'backgroundColor': '#3D9970', # mettr eles lignes france en bleu
+                       'color': 'white',
+                           },
+                   {
+                       'if': {
+                           'column_id': 'New_cases',
+                           'filter_query': 'New_cases > 100'
+                           },
+                       'backgroundColor': 'yellow', 
+                       'color': 'black',
+                       },
+                    {
+                       'if': {
+                           'column_id': 'New_cases',
+                           'filter_query': 'New_cases < 50'
+                           },
+                       'backgroundColor': 'white',
+                       'color': 'green',
+                       },
+                    {
+                       'if': {
+                           'column_id': 'New_cases',
+                           'filter_query': 'New_cases > 1000'
+                           },
+                       'backgroundColor': 'orange',
+                       'color': 'white',
+                       },
+                    {
+                        'if': {
+                            'column_id': 'New_deaths',
+                            'filter_query': 'New_deaths > 100'
+                            },
+                        'backgroundColor': 'red',
+                        'color': 'white',
+                        },
+                    {
+                        'if': {
+                            'column_id': 'New_deaths',
+                            'filter_query': 'New_deaths > 1000'
+                            },
+                        'backgroundColor': '#7f0000',
+                        'color': 'white',
+                        },
+                    {
+                        'if': {
+                            'column_id': 'New_deaths',
+                            'filter_query': 'New_deaths < 50'
+                            },
+                        'backgroundColor': 'white',
+                        'color': 'green',
+                        }
+            ]
+
 app.layout = html.Div([
-    html.H1('Covid-19 Dasboard'),
+    html.H1(children='Covid-19 Dasboard',
+        style={
+            'textAlign': 'center',
+            'color': '#101b32'
+            }
+        ),
     dcc.Tabs(id='tabs-world', value='world-data', children=[ 
         dcc.Tab(label='Monde', value='world-data', style=tab_style, selected_style=tab_selected_style,children=[
+           
             dbc.Row([
                 dbc.Col(html.Div([
                 html.Br(),
@@ -703,15 +834,53 @@ app.layout = html.Div([
                 ],style={"margin":"auto"}),
 
             html.Div(id='tabs-content-inline'),
-
-           dash_table.DataTable(# voir pourquoi les données ne s'affichent pas
+            html.H5(children='The WHO regions for which the data were used are: AMRO: The Americas, EMRO: Eastern Mediterrane, EURO: Europe, AFRO: Africa, SEARO: South-East Asia',
+        style={
+            'textAlign': 'left',
+            'color': '#101b32'
+            }
+        ),
+            dbc.Row([
+                dbc.Col(html.Div([
+                html.Br(),
+                card_graph_world1,
+                html.Br(),
+                html.Br()])),
+                ],style={"margin":"auto"}),
+            dbc.Row([
+                dbc.Col(html.Div([
+                html.Br(),
+                card_graph_world2,
+                html.Br(),
+                html.Br()])),
+                ],style={"margin":"auto"}),
+            dbc.Row([
+                dbc.Col(html.Div([
+                html.Br(),
+                card_graph_world4,
+                html.Br(),
+                html.Br()])),
+                ],style={"margin":"auto"}),
+        
+           dash_table.DataTable(
+            columns=[
+                    {'name': 'Date', 'id': 'Date_reported', 'type': 'datetime'},
+                    {'name': 'Country', 'id': 'Country', 'type': 'text'},
+                    {'name': 'Continent', 'id': 'WHO_region', 'type': 'text'},
+                    {'name': 'New cases', 'id': 'New_cases', 'type': 'numeric'},
+                    {'name': 'New deaths', 'id': 'New_deaths', 'type': 'numeric'},
+                    {'name': 'Cumulative cases', 'id': 'Cumulative_cases', 'type': 'numeric'},
+                    {'name': 'Cumulative deaths', 'id': 'Cumulative_deaths', 'type': 'numeric'}
+                    ],
                data=df_monde.to_dict('records'),
                sort_action='native',
                sort_mode="multi",
                column_selectable="single",
                row_selectable="multi",
-               columns=[{'id': c, 'name': c} for c in df_monde.columns],
+              # columns=[{'id': c, 'name': c} for c in df_monde.columns],
+               style_data_conditional= style_dataconditional,
                fixed_rows={'headers': True, 'data': 1},
+               filter_action='native',
                selected_columns=[],
                selected_rows=[],
                page_action="native",
@@ -746,7 +915,7 @@ app.layout = html.Div([
                 html.Br()])),
                 ],style={"margin":"auto"}),
             ]),
-        dcc.Tab(label='France Réanimation', value='tab-1', style=tab_style, selected_style=tab_selected_style, children=[
+        dcc.Tab(label='France: Réanimation', value='tab-1', style=tab_style, selected_style=tab_selected_style, children=[
              dbc.Row([
                 dbc.Col(html.Div([
                 html.Br(),
@@ -787,7 +956,7 @@ app.layout = html.Div([
                 html.Br()])),
                 ],style={"margin":"auto"}),
             ]),
-        dcc.Tab(label='France Décès', value='tab-2', style=tab_style, selected_style=tab_selected_style,children=[
+        dcc.Tab(label='France: Décès', value='tab-2', style=tab_style, selected_style=tab_selected_style,children=[
              dbc.Row([
                 dbc.Col(html.Div([
                 html.Br(),
@@ -795,40 +964,39 @@ app.layout = html.Div([
                 html.Br(),
                 html.Br()])),
                 ],style={"margin":"auto"}),
+            dbc.Row([	
+                dbc.Col(html.Div([	
+                html.Br(),	
+                card_graph_dc_tps1,	
+                html.Br(),	
+                html.Br()])),	
+                ],style={"margin":"auto"}),	
 
-             dbc.Row([
-                dbc.Col(html.Div([
-                html.Br(),
-                card_graph_dc_tps1,
-                html.Br(),
-                html.Br()])),
-                ],style={"margin":"auto"}),
+             dbc.Row([	
+                dbc.Col(html.Div([	
+                html.Br(),	
+                card_graph_dc_sexe1,	
+                html.Br(),	
+                html.Br()])),	
+                ],style={"margin":"auto"}),	
 
-             dbc.Row([
-                dbc.Col(html.Div([
-                html.Br(),
-                card_graph_dc_sexe1,
-                html.Br(),
-                html.Br()])),
-                ],style={"margin":"auto"}),
+             dbc.Row([	
+                dbc.Col(html.Div([	
+                html.Br(),	
+                card_graph_dc_reg1,	
+                html.Br(),	
+                html.Br()])),	
+                ],style={"margin":"auto"}),	
 
-             dbc.Row([
-                dbc.Col(html.Div([
-                html.Br(),
-                card_graph_dc_reg1,
-                html.Br(),
-                html.Br()])),
-                ],style={"margin":"auto"}),
-
-             dbc.Row([
-                dbc.Col(html.Div([
-                html.Br(),
-                card_graph_dc_dep1,
-                html.Br(),
-                html.Br()])),
+             dbc.Row([	
+                dbc.Col(html.Div([	
+                html.Br(),	
+                card_graph_dc_dep1,	
+                html.Br(),	
+                html.Br()])),	
                 ],style={"margin":"auto"}),
             ]),
-        dcc.Tab(label='France Vaccination', value='tab-3', style=tab_style, selected_style=tab_selected_style,children=[
+        dcc.Tab(label='France: Vaccination', value='tab-3', style=tab_style, selected_style=tab_selected_style,children=[
             dbc.Row([
                 dbc.Col(html.Div([
                 html.Br(),
