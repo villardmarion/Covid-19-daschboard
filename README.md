@@ -79,7 +79,22 @@ This makes it possible to compare the number of new cases over time in two diffe
 ![Capture d’écran 2021-05-15 à 20 46 36](https://user-images.githubusercontent.com/83781622/118374909-a6b18e80-b5be-11eb-8058-990b0b44b55c.png)
 This makes it possible to compare the number of new deaths over time in two different countries. To do this, it suffices for each of the two graphs to choose the countries that you want to compare from the drop-down menu containing the list.
 
+![Capture d’écran 2021-05-15 à 23 32 45](https://user-images.githubusercontent.com/83781622/118378706-dc15a680-b5d5-11eb-8f83-8bb93a95d499.png)
+![Capture d’écran 2021-05-15 à 23 36 10](https://user-images.githubusercontent.com/83781622/118378800-57775800-b5d6-11eb-939f-f7b01ce3bd1b.png)
+These visualizations make it possible to study the evolution of the number of new cases or new deaths in the world with a slider allowing to move the period over which one wishes to study the graph.
+
+![Capture d’écran 2021-05-15 à 23 33 00](https://user-images.githubusercontent.com/83781622/118378712-e637a500-b5d5-11eb-8f51-7a1a66c0e3b2.png)
+![Capture d’écran 2021-05-15 à 23 36 40](https://user-images.githubusercontent.com/83781622/118378815-6a8a2800-b5d6-11eb-8ada-a98b92e4e74d.png)
+These bar charts allow to study the total number of cases by region in the world, it is possible via the side checklist to remove regions of the world from the chart.
+
+![Capture d’écran 2021-05-15 à 23 37 36](https://user-images.githubusercontent.com/83781622/118378835-8b527d80-b5d6-11eb-9d47-ba8899e4ac8f.png)
+This visualization makes it possible to study the number of vaccinations in the world according to the country. The regions of the world are selectable from the side checklist. The linked countries are removed or added to the chart accordingly.
+
 Data Table : 
+![Capture d’écran 2021-05-15 à 23 31 20](https://user-images.githubusercontent.com/83781622/118378675-a96bae00-b5d5-11eb-8294-165eeec184c6.png)
+This table represents all the data of the world used in particular to carry out the visualizations.
+It is possible to apply a filter to each of the columns of this table.
+This makes it possible to obtain precise information if one wishes to know the number of cases on a specific date in a given country for example.
 
 ### France
 This page contains 4 indicator cards:
@@ -192,6 +207,7 @@ Study of the number of complete vaccinations according to the regions:
 ![Capture d’écran 2021-05-15 à 21 43 22](https://user-images.githubusercontent.com/83781622/118376154-94d3e980-b5c6-11eb-8286-cf533c8e856d.png)
 
 
+### Analyse de survie
 
 # Modélisation SIR:
 Source de ce jeu de données : https://coronavirus.politologue.com - Les données proposées dans ce fichier sont une compilation des données proposées par le CSSE (The Johns Hopkins University) https://gisanddata.maps.arcgis.com/apps/opsdashboard/index.html#/bda7594740fd40299423467b48e9ecf6
