@@ -321,7 +321,7 @@ cards_vacc = html.Div(
 ## New cases graphique:
 monde_cases_time = df_monde[['Date_reported','New_cases']].groupby('Date_reported', as_index=False).sum()
 def update_graph_monde(title):
-    fig_time = px.line(monde_cases_time, x=monde_cases_time['Date_reported'], y=monde_cases_time['New_cases'], title=title)
+    fig_time = px.line(monde_cases_time, x=monde_cases_time['Date_reported'], y=monde_cases_time['New_cases'], labels={"Date_reported":"Date","New_cases":"Nombre de nouveaux cas"}, title=title)
     fig_time.update_xaxes(rangeslider_visible=True)
     return fig_time
     
@@ -342,7 +342,7 @@ card_graph_world1 = html.Div(
      
 monde_cases = df_monde[['New_cases','WHO_region']].groupby('WHO_region', as_index=False).sum()
 def update_graph_monde3(title):
-    fig_time = px.bar(monde_cases, x=monde_cases['WHO_region'], y=monde_cases['New_cases'], color=monde_cases['WHO_region'], title=title)
+    fig_time = px.bar(monde_cases, x=monde_cases['WHO_region'], y=monde_cases['New_cases'], color=monde_cases['WHO_region'],  labels={"WHO_region":"Region du monde","New_cases":"Nombre de nouveaux cas"},title=title)
     return fig_time
     
 card_graph_world_time3 = dbc.Card(
@@ -362,7 +362,7 @@ card_graph_world3 = html.Div(
       
 monde_deaths_time = df_monde[['Date_reported','New_deaths']].groupby('Date_reported', as_index=False).sum()
 def update_graph_monde2(title):
-    fig_time = px.line(monde_deaths_time, x=monde_deaths_time['Date_reported'], y=monde_deaths_time['New_deaths'], title=title)
+    fig_time = px.line(monde_deaths_time, x=monde_deaths_time['Date_reported'], y=monde_deaths_time['New_deaths'],  labels={"Date_reported":"Date","New_Deaths":"Nombre de nouveaux décès"},title=title)
     fig_time.update_xaxes(rangeslider_visible=True)
     return fig_time
     
@@ -383,7 +383,7 @@ card_graph_world2 = html.Div(
 
 monde_deaths = df_monde[['New_deaths','WHO_region']].groupby('WHO_region', as_index=False).sum()
 def update_graph_monde5(title):
-    fig_time = px.bar(monde_deaths, x=monde_deaths['WHO_region'], y=monde_deaths['New_deaths'], color=monde_deaths['WHO_region'], title=title)
+    fig_time = px.bar(monde_deaths, x=monde_deaths['WHO_region'], y=monde_deaths['New_deaths'], color=monde_deaths['WHO_region'],  labels={"WHO_region":"region du monde","New_deaths":"Nombre de nouveaux décès"}, title=title)
     return fig_time
     
 card_graph_world_time5 = dbc.Card(
@@ -403,7 +403,7 @@ card_graph_world5 = html.Div(
 # vaccination dans le monde:
         
 def update_graph_monde4(title):
-    fig_time = px.bar(df_monde_vacc, x='COUNTRY', y='TOTAL_VACCINATIONS', color='WHO_REGION', title=title)
+    fig_time = px.bar(df_monde_vacc, x='COUNTRY', y='TOTAL_VACCINATIONS', color='WHO_REGION',  labels={"COUNTRY":"Pays","TOTAL_VACCINATIONS":"Nombre total de personnes vaccinées"}, title=title)
     return fig_time
     
 card_graph_world_time4 = dbc.Card(
