@@ -207,6 +207,12 @@ Study of the number of complete vaccinations according to the regions:
 ![Capture d’écran 2021-05-15 à 21 43 22](https://user-images.githubusercontent.com/83781622/118376154-94d3e980-b5c6-11eb-8286-cf533c8e856d.png)
 
 
+
+
+
+
+
+
 ### Analyse de survie
 
 # Modélisation SIR:
@@ -215,3 +221,20 @@ Les données de ce fichier sont celles qui sont produites pour générer les gra
 Vous pouvez utiliser ces données sans problème et une référence à https://coronavirus.politologue.com sera appréciable
 
 
+# Visualisations SIR 
+
+# Pour la France
+![IMG_1673](https://user-images.githubusercontent.com/71569446/118392976-bff92000-b63c-11eb-8536-b1bc92111c30.PNG)
+
+![IMG_1672](https://user-images.githubusercontent.com/71569446/118392981-c4253d80-b63c-11eb-8c99-e244ed60461f.PNG)
+
+![IMG_1671](https://user-images.githubusercontent.com/71569446/118392950-8fb18180-b63c-11eb-9e7f-ce2949d4eb1a.PNG)
+
+Ainsi, sur les 3 images précédentes, nous constatons que le nombre d'infections diminue au cours du temps. Les nombres de guerisons et de déces diminuent également. 
+
+# Pour les différents pays 
+![IMG_1674](https://user-images.githubusercontent.com/71569446/118393037-241be400-b63d-11eb-9565-9c460a23f71b.PNG)
+
+![IMG_1675](https://user-images.githubusercontent.com/71569446/118393039-2716d480-b63d-11eb-89de-dae0e23a221a.PNG)
+
+![IMG_1676](https://user-images.githubusercontent.com/71569446/118393040-28e09800-b63d-11eb-83d7-d3e023d2a2ae.PNG)
