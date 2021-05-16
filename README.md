@@ -30,17 +30,17 @@ For information about vaccination, another WHO database was used (which can be d
 ### French data
 For each database presented, the download link is given, all of which are available in open source.
 - https://www.data.gouv.fr/fr/datasets/r/6fadff46-9efd-4c53-942a-54aca783c30c: Used for hospital data, it is available in open source.
-It contains information on the date, departments, hospitalizations, resuscitations, deaths or returns home of patients.
+It contains information on the date, departments, hospitalizations,  ICU admissions, deaths or returns home of patients.
 It was used in the dashboard to calculate, in particular, the indicators for the "global view of the situation in France", "resuscitation" and "deaths" pages.
 - https://www.data.gouv.fr/fr/datasets/r/63352e38-d353-4b54-bfd1-f1b3ee1cabd7: Used to obtain the total number of deaths (not only in the hospital environment).
-It contains information on departments, sexes, hospitalizations, resuscitations, deaths or returns home.
-It was used to calculate, in particular, indicators related to the sex ratio in terms of the number of deaths or resuscitations.
+It contains information on departments, sexes, hospitalizations,  ICU admissions, deaths or returns home.
+It was used to calculate, in particular, indicators related to the sex ratio in terms of the number of deaths or  ICU admissions.
 - https://www.data.gouv.fr/fr/datasets/r/b8d4eb4c-d0ae-4af6-bb23-0e39f70262bd: Used to study the vaccination situation in France.
 It contains the information of the different vaccines concerning the number of vaccinations by the first dose and the second dose.
 Small database but containing a certain amount of information on the different vaccines prescribed in the first and second dose.
 - https://www.data.gouv.fr/fr/datasets/r/63352e38-d353-4b54-bfd1-f1b3ee1cabd7: Used for the "resuscitation" part and the "death" part of the dashboard targeted on France.
-It contains information on the department, gender, date, resuscitations, hospitalizations, deaths and returns home.
-It was used for the realization of visualizations of resuscitations according to time, sex and department.
+It contains information on the department, gender, date,  ICU admissions, hospitalizations, deaths and returns home.
+It was used for the realization of visualizations of  ICU admissions according to time, sex and department.
 It was also used for the same visualizations regarding deaths.
 It was also used for the realization of the dynamic graphics of the global page of France.
 - https://www.data.gouv.fr/fr/datasets/r/08c18e08-6780-452d-9b8c-ae244ad529b3: Also used in the "resuscitation" part and the "death" part of the dashboard.
@@ -99,7 +99,7 @@ This makes it possible to obtain precise information if one wishes to know the n
 ### France
 This page contains 4 indicator cards:
 - The number of total and hospital deaths
-- The total number of resuscitations
+- The total number of  ICU admissions
 - The total number of hospitalizations
 - The total number of complete vaccinations
 ![Capture d’écran 2021-05-15 à 20 50 02](https://user-images.githubusercontent.com/83781622/118374998-20497c80-b5bf-11eb-9aa9-b04362750d08.png)
@@ -132,7 +132,7 @@ Dropdown menu :
 The two drop-down menus allow you to select the two regions that you want to compare in relation to the number of resuscitations over time.![Capture d’écran 2021-05-15 à 21 23 46](https://user-images.githubusercontent.com/83781622/118375734-d7e08d80-b5c3-11eb-8011-40d37807708e.png)
 These same graphs are present a second time in this part but with death and not resuscitation as a variable.
 
-#### France Resuscitation
+#### France  ICU admissions
 This page contains 4 indicator cards concerning resuscitation in France with:
 - The number of resuscitations in total
 - The number of current resuscitations in men
@@ -142,19 +142,19 @@ This page contains 4 indicator cards concerning resuscitation in France with:
 
 Graphic visualizations:
 
-Study of the number of resuscitations as a function of time:
+Study of the number of  ICU admissions as a function of time:
 ![Capture d’écran 2021-05-15 à 21 33 49](https://user-images.githubusercontent.com/83781622/118375933-3f4b0d00-b5c5-11eb-87f5-1e2f2f8ba488.png)
 
-Study of the number of resuscitations according to sex:
+Study of the number of  ICU admissions according to sex:
 ![Capture d’écran 2021-05-15 à 21 34 06](https://user-images.githubusercontent.com/83781622/118375938-496d0b80-b5c5-11eb-8206-7ae449d893ef.png)
 
 Study of the number of resuscitations according to the age group:
 ![Capture d’écran 2021-05-15 à 21 34 19](https://user-images.githubusercontent.com/83781622/118375944-50941980-b5c5-11eb-9519-7551d00bf223.png)
 
-Study of the number of resuscitations according to the regions:
+Study of the number of  ICU admissions according to the regions:
 ![Capture d’écran 2021-05-15 à 21 34 34](https://user-images.githubusercontent.com/83781622/118375947-5a1d8180-b5c5-11eb-895a-ff72a60b3444.png)
 
-Study of the number of resuscitations according to the departments:
+Study of the number of ICU admissions according to the departments:
 ![Capture d’écran 2021-05-15 à 21 34 51](https://user-images.githubusercontent.com/83781622/118375951-63a6e980-b5c5-11eb-9025-2ebb75d6e3f3.png)
 
 #### France Death
@@ -206,8 +206,6 @@ Study of the number of complete vaccinations according to the age group of patie
 Study of the number of complete vaccinations according to the regions:
 ![Capture d’écran 2021-05-15 à 21 43 22](https://user-images.githubusercontent.com/83781622/118376154-94d3e980-b5c6-11eb-8286-cf533c8e856d.png)
 
-
-### Analyse de survie
 
 # Modélisation SIR:
 Source de ce jeu de données : https://coronavirus.politologue.com - Les données proposées dans ce fichier sont une compilation des données proposées par le CSSE (The Johns Hopkins University) https://gisanddata.maps.arcgis.com/apps/opsdashboard/index.html#/bda7594740fd40299423467b48e9ecf6
